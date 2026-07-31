@@ -36,3 +36,19 @@ export default function StartupInternships() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
+              {data.map(i => (
+                <tr key={i.id} className="bg-white">
+                  <td className="px-5 py-3 font-medium text-foreground">{i.title}</td>
+                  <td className="px-5 py-3 text-muted-foreground">{i.duration || '—'}</td>
+                  <td className="px-5 py-3 text-muted-foreground">{i.deadline ? new Date(i.deadline).toLocaleDateString() : '—'}</td>
+                  <td className="px-5 py-3 text-muted-foreground">{i.skills_required?.join(', ') || '—'}</td>
+                  <td className="px-5 py-3"><StatusBadge status={i.status || 'draft'} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
