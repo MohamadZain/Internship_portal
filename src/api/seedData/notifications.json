@@ -1,0 +1,11 @@
+[
+  {
+    "id": "notification_welcome_001",
+    "title": "Welcome",
+    "message": "You are now using the local backend.",
+    "recipient_role": "student",
+    "read": false,
+    "created_date": "2026-07-31T00:00:00.000Z",
+    "updated_date": "2026-07-31T00:00:00.000Z"
+  }
+]

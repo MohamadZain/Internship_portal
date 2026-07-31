@@ -1,0 +1,102 @@
+[
+   {
+    "id": "startup_001",
+    "owner_user_id": "user_startup_002",
+    "name": "PixelCraft",
+    "industry": "Software",
+    "website": "https://pixelcraft.example",
+    "status": "approved",
+    "created_date": "2026-07-31T00:00:00.000Z",
+    "updated_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "startup_002",
+    "owner_user_id": "user_startup_003",
+    "name": "CloudNest",
+    "industry": "Cloud & Infrastructure",
+    "website": "https://cloudnest.example",
+    "status": "approved",
+    "created_date": "2026-07-31T00:00:00.000Z",
+    "updated_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "startup_003",
+    "owner_user_id": "user_startup_004",
+    "name": "Finova",
+    "industry": "FinTech",
+    "website": "https://finova.example",
+    "status": "approved",
+    "created_date": "2026-07-31T00:00:00.000Z",
+    "updated_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "startup_004",
+    "owner_user_id": "user_startup_005",
+    "name": "GreenLoop",
+    "industry": "Sustainability",
+    "website": "https://greenloop.example",
+    "status": "approved",
+    "created_date": "2026-07-31T00:00:00.000Z",
+    "updated_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "startup_005",
+    "owner_user_id": "user_startup_006",
+    "name": "EduVista",
+    "industry": "EdTech",
+    "website": "https://eduvista.example",
+    "status": "approved",
+    "created_date": "2026-07-31T00:00:00.000Z",
+    "updated_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "startup_006",
+    "owner_user_id": "user_startup_007",
+    "name": "MarketMint",
+    "industry": "Marketing Technology",
+    "website": "https://marketmint.example",
+    "status": "approved",
+    "created_date": "2026-07-31T00:00:00.000Z",
+    "updated_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "startup_007",
+    "owner_user_id": "user_startup_008",
+    "name": "CypherGrid",
+    "industry": "Cybersecurity",
+    "website": "https://cyphergrid.example",
+    "status": "approved",
+    "created_date": "2026-07-31T00:00:00.000Z",
+    "updated_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "startup_008",
+    "owner_user_id": "user_startup_009",
+    "name": "BuildSpace",
+    "industry": "Construction Technology",
+    "website": "https://buildspace.example",
+    "status": "approved",
+    "created_date": "2026-07-31T00:00:00.000Z",
+    "updated_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "startup_009",
+    "owner_user_id": "user_startup_010",
+    "name": "TalentLoop",
+    "industry": "Human Resources",
+    "website": "https://talentloop.example",
+    "status": "approved",
+    "created_date": "2026-07-31T00:00:00.000Z",
+    "updated_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "startup_010",
+    "owner_user_id": "user_startup_011",
+    "name": "InsightLabs",
+    "industry": "Data & Analytics",
+    "website": "https://insightlabs.example",
+    "status": "approved",
+    "created_date": "2026-07-31T00:00:00.000Z",
+    "updated_date": "2026-07-31T00:00:00.000Z"
+  }
+]

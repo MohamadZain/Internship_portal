@@ -1,7 +1,13 @@
-const STORAGE_KEY = "qstp_local_backend_v1";
-const TOKEN_KEY = "qstp_local_backend_token";
+import usersSeed from "./seedData/users.json";
+import startupsSeed from "./seedData/startups.json";
+import internshipsSeed from "./seedData/internships.json";
+import applicationsSeed from "./seedData/applications.json";
+import shortlistsSeed from "./seedData/shortlists.json";
+import notificationsSeed from "./seedData/notifications.json";
 
 const nowIso = () => new Date().toISOString();
+const SESSION_STATE_KEY = "qstp_local_backend_v1";
+const SESSION_TOKEN_KEY = "qstp_local_backend_token";
 
 const deepClone = (value) => {
   if (typeof structuredClone === "function") {
@@ -14,77 +20,72 @@ const makeId = (prefix) => `${prefix}_${Math.random().toString(36).slice(2, 10)}
 
 const seedState = () => {
   const created = nowIso();
-  const startupId = makeId("startup");
-  const internshipId = makeId("internship");
+  const startupId = "startup_demo_001";
+  const internshipId = "internship_demo_001";
 
   return {
-    users: [
-      { id: makeId("user"), email: "admin@local.dev", password: "admin123", role: "admin", name: "Local Admin", verified: true, created_date: created },
-      { id: makeId("user"), email: "startup@local.dev", password: "startup123", role: "startup", name: "Local Startup", verified: true, created_date: created },
-      { id: makeId("user"), email: "student@local.dev", password: "student123", role: "student", name: "Local Student", verified: true, created_date: created },
-    ],
+    currentToken: null,
+    users: deepClone(usersSeed),
     authTokens: {},
     entities: {
-      Startup: [
-        {
-          id: startupId,
-          name: "Local Demo Startup",
-          industry: "Software",
-          website: "https://example.local",
-          status: "approved",
-          created_date: created,
-          updated_date: created,
-        },
-      ],
-      Internship: [
-        {
-          id: internshipId,
-          title: "Frontend Engineering Intern",
-          description: "Build product UI using React and Tailwind.",
-          startup_id: startupId,
-          startup_name: "Local Demo Startup",
-          skills_required: ["React", "JavaScript"],
-          duration: "3 months",
-          location: "Doha",
-          status: "published",
-          is_featured: false,
-          created_date: created,
-          updated_date: created,
-        },
-      ],
-      Application: [],
-      Shortlist: [],
-      Notification: [
-        {
-          id: makeId("notification"),
-          title: "Welcome",
-          message: "You are now using the local backend.",
-          recipient_role: "student",
-          read: false,
-          created_date: created,
-          updated_date: created,
-        },
-      ],
+      Startup: deepClone(startupsSeed),
+      Internship: deepClone(internshipsSeed),
+      Application: deepClone(applicationsSeed),
+      Shortlist: deepClone(shortlistsSeed),
+      Notification: deepClone(notificationsSeed),
+    },
+    meta: {
+      created,
+      startupId,
+      internshipId,
     },
   };
 };
 
-const loadState = () => {
-  if (typeof window === "undefined") return seedState();
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-  if (!raw) return seedState();
+let inMemoryState = null;
+let currentToken = null;
+
+const readSessionState = () => {
+  if (typeof window === "undefined") return null;
   try {
+    const raw = window.sessionStorage.getItem(SESSION_STATE_KEY);
+    if (!raw) return null;
     const parsed = JSON.parse(raw);
-    if (!parsed || typeof parsed !== "object") return seedState();
-    return parsed;
+    return parsed && typeof parsed === "object" ? parsed : null;
   } catch {
-    return seedState();
+    return null;
   }
 };
 
-const saveState = (state) => {
+const writeSessionState = (state) => {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  try {
+    window.sessionStorage.setItem(SESSION_STATE_KEY, JSON.stringify(state));
+  } catch (error) {
+    console.warn("Unable to persist the auth session state", error);
+  }
+};
+
+const readSessionToken = () => {
+  if (typeof window === "undefined") return currentToken;
+  try {
+    return window.sessionStorage.getItem(SESSION_TOKEN_KEY) || currentToken;
+  } catch {
+    return currentToken;
+  }
+};
+
+const writeSessionToken = (token) => {
+  if (typeof window === "undefined") return;
+  try {
+    if (!token) {
+      window.sessionStorage.removeItem(SESSION_TOKEN_KEY);
+      return;
+    }
+    window.sessionStorage.setItem(SESSION_TOKEN_KEY, token);
+  } catch (error) {
+    console.warn("Unable to persist the auth token", error);
+  }
 };
 
 const normalizeStore = (state) => {
@@ -92,13 +93,32 @@ const normalizeStore = (state) => {
   next.users = Array.isArray(next.users) ? next.users : [];
   next.authTokens = next.authTokens && typeof next.authTokens === "object" ? next.authTokens : {};
   next.entities = next.entities && typeof next.entities === "object" ? next.entities : {};
+  next.currentToken = next.currentToken || currentToken || null;
   return next;
 };
 
-const withState = (fn) => {
-  const state = normalizeStore(loadState());
-  const result = fn(state);
-  saveState(state);
+const loadState = async () => {
+  if (!inMemoryState) {
+    const persistedState = readSessionState();
+    inMemoryState = normalizeStore(persistedState || seedState());
+    currentToken = inMemoryState.currentToken || readSessionToken() || null;
+  }
+
+  return normalizeStore(inMemoryState);
+};
+
+const saveState = async (state) => {
+  const nextState = normalizeStore(state);
+  inMemoryState = nextState;
+  currentToken = nextState.currentToken || readSessionToken() || null;
+  writeSessionState(nextState);
+  writeSessionToken(currentToken);
+};
+
+const withState = async (fn) => {
+  const state = normalizeStore(await loadState());
+  const result = await fn(state);
+  await saveState(state);
   return result;
 };
 
@@ -109,15 +129,15 @@ const ensureEntityBucket = (state, entityName) => {
   return state.entities[entityName];
 };
 
-const getCurrentToken = () => (typeof window === "undefined" ? null : window.localStorage.getItem(TOKEN_KEY));
+const getCurrentToken = () => currentToken || readSessionToken();
 
 const setCurrentToken = (token) => {
-  if (typeof window === "undefined") return;
-  if (!token) {
-    window.localStorage.removeItem(TOKEN_KEY);
-    return;
+  currentToken = token || null;
+  writeSessionToken(currentToken);
+  if (inMemoryState) {
+    inMemoryState.currentToken = currentToken;
+    writeSessionState(inMemoryState);
   }
-  window.localStorage.setItem(TOKEN_KEY, token);
 };
 
 const publicUser = (user) => ({
@@ -341,10 +361,10 @@ const auth = {
     });
   },
 
-  loginWithProvider(provider, returnTo = "/") {
+  async loginWithProvider(provider, returnTo = "/") {
     if (provider !== "google") throw makeAuthError("Only google provider is supported in local mode", 400);
 
-    withState((state) => {
+    await withState((state) => {
       let user = state.users.find((entry) => entry.email === "google.user@local.dev");
       if (!user) {
         user = {
@@ -392,12 +412,13 @@ const auth = {
     });
   },
 
-  logout(returnTo) {
-    withState((state) => {
+  async logout(returnTo) {
+    await withState((state) => {
       const token = getCurrentToken();
       if (token) {
         delete state.authTokens[token];
       }
+      state.currentToken = null;
       return null;
     });
     setCurrentToken(null);

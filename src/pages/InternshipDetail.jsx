@@ -176,6 +176,7 @@ export default function InternshipDetail() {
         application_form_snapshot: hasConfiguredForm ? applicationConfig : undefined,
         status: 'applied',
       });
+      console.log(await db.entities.Application);
       toast({ title: 'Application submitted!', description: 'The startup and QSTP will review your application.' });
       setApplyOpen(false);
       navigate('/applications');
