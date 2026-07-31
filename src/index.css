@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 224 25% 9%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 25% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 25% 9%;
+    --primary: 256 78% 56%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 230 40% 96%;
+    --secondary-foreground: 224 25% 15%;
+    --muted: 225 33% 96%;
+    --muted-foreground: 220 12% 45%;
+    --accent: 250 60% 96%;
+    --accent-foreground: 256 78% 40%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 225 20% 91%;
+    --input: 225 20% 91%;
+    --ring: 256 78% 56%;
+    --chart-1: 256 78% 56%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.75rem;
+    --font-heading: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --sidebar-background: 232 30% 8%;
+    --sidebar-foreground: 220 15% 75%;
+    --sidebar-primary: 256 78% 62%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 232 25% 14%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 232 20% 16%;
+    --sidebar-ring: 256 78% 62%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+
+  h1, h2, h3, h4, h5 {
+    @apply font-heading tracking-tight;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(220 12% 80%) transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: hsl(220 12% 80%);
+    border-radius: 9999px;
+  }
+  .scrollbar-dark {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(232 20% 25%) transparent;
+  }
+  .scrollbar-dark::-webkit-scrollbar {
+    width: 6px;
+  }
+  .scrollbar-dark::-webkit-scrollbar-thumb {
+    background-color: hsl(232 20% 25%);
+    border-radius: 9999px;
+  }
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, hsl(225 20% 94%) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(225 20% 94%) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .glass {
+    backdrop-filter: blur(12px);
+    background-color: rgba(255,255,255,0.7);
+  }
+  .qstp-input {
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 1px solid hsl(var(--border));
+    background-color: #fff;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    color: hsl(var(--foreground));
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .qstp-input:focus {
+    border-color: hsl(256 78% 60%);
+    box-shadow: 0 0 0 3px hsl(256 78% 56% / 0.15);
+  }
+  .qstp-input::placeholder {
+    color: hsl(220 12% 65%);
+  }
+}

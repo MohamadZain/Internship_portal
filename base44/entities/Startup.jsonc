@@ -1,0 +1,42 @@
+{
+  "name": "Startup",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "logo_url": {
+      "type": "string"
+    },
+    "industry": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "founded_year": {
+      "type": "number"
+    },
+    "team_size": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

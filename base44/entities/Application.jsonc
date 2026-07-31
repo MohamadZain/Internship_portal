@@ -1,0 +1,59 @@
+{
+  "name": "Application",
+  "type": "object",
+  "properties": {
+    "internship_id": {
+      "type": "string"
+    },
+    "internship_title": {
+      "type": "string"
+    },
+    "startup_id": {
+      "type": "string"
+    },
+    "student_name": {
+      "type": "string"
+    },
+    "student_email": {
+      "type": "string"
+    },
+    "student_university": {
+      "type": "string"
+    },
+    "student_major": {
+      "type": "string"
+    },
+    "resume_url": {
+      "type": "string"
+    },
+    "linkedin": {
+      "type": "string"
+    },
+    "github": {
+      "type": "string"
+    },
+    "portfolio": {
+      "type": "string"
+    },
+    "cover_letter": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "applied",
+        "under_review",
+        "shortlisted",
+        "rejected"
+      ],
+      "default": "applied"
+    },
+    "ai_summary": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "internship_id",
+    "student_name"
+  ]
+}
