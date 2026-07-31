@@ -24,6 +24,7 @@ import ShortlistedCandidates from '@/pages/startup/ShortlistedCandidates';
 import StartupManagement from '@/pages/admin/StartupManagement';
 import InternshipApproval from '@/pages/admin/InternshipApproval';
 import AdminApplications from '@/pages/admin/Applications';
+import ApplicationDetails from '@/pages/admin/ApplicationDetails';
 import AnalyzeCandidates from '@/pages/admin/AnalyzeCandidates';
 import TopCandidates from '@/pages/admin/TopCandidates';
 import Shortlists from '@/pages/admin/Shortlists';
@@ -72,6 +73,7 @@ const AuthenticatedApp = () => {
           <Route path="/admin/startups" element={<StartupManagement />} />
           <Route path="/admin/internship-approval" element={<InternshipApproval />} />
           <Route path="/admin/applications" element={<AdminApplications />} />
+          <Route path="/admin/applications/:id" element={<ApplicationDetails />} />
           <Route path="/admin/analyze-candidates" element={<AnalyzeCandidates />} />
           <Route path="/admin/top-candidates" element={<TopCandidates />} />
           <Route path="/admin/shortlists" element={<Shortlists />} />

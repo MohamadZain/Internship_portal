@@ -1,12 +1,16 @@
 import { useState, useMemo } from 'react';
-import { FileText, Search, ExternalLink, Linkedin, Github, Globe, Briefcase, ChevronDown } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { FileText, Search, ExternalLink, Linkedin, Github, Globe, Briefcase, ChevronDown, Eye, Download } from 'lucide-react';
 import { useEntityList } from '@/lib/useEntityList';
 import PageHeader from '@/components/PageHeader';
 import Loading from '@/components/Loading';
 import EmptyState from '@/components/EmptyState';
 import StatusBadge from '@/components/StatusBadge';
+import { useToast } from '@/components/ui/use-toast';
 
 export default function AdminApplications() {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const { data, loading } = useEntityList('Application', { sort: '-created_date' });
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
@@ -27,9 +31,69 @@ export default function AdminApplications() {
     });
   }, [data, query, filter, internshipFilter]);
 
+  const downloadFile = (content, fileName, mimeType) => {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = fileName;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleDownloadAllResumes = () => {
+    const resumeRows = (filtered || [])
+      .filter((application) => application.resume_url)
+      .map((application) => `${application.student_name || 'Unknown'},${application.student_email || ''},${application.resume_url}`);
+
+    if (resumeRows.length === 0) {
+      toast({ title: 'No resumes available to download', variant: 'destructive' });
+      return;
+    }
+
+    const content = ['Student Name,Email,Resume URL', ...resumeRows].join('\n');
+    downloadFile(content, 'applicant-resumes.csv', 'text/csv;charset=utf-8;');
+    toast({ title: 'Resume export downloaded' });
+  };
+
+  const handleExportApplicationsCsv = () => {
+    const rows = (filtered || []).map((application) => [
+      application.student_name || '',
+      application.student_email || '',
+      application.student_university || '',
+      application.student_major || '',
+      application.internship_title || '',
+      application.startup_name || '',
+      application.status || '',
+    ]);
+
+    if (rows.length === 0) {
+      toast({ title: 'No applications to export', variant: 'destructive' });
+      return;
+    }
+
+    const escapeCell = (value) => `"${String(value).replace(/"/g, '""')}"`;
+    const csv = [
+      ['Student Name', 'Email', 'University', 'Degree', 'Internship', 'Startup', 'Status'].map(escapeCell).join(','),
+      ...rows.map((row) => row.map(escapeCell).join(',')),
+    ].join('\n');
+
+    downloadFile(csv, 'applications.csv', 'text/csv;charset=utf-8;');
+    toast({ title: 'Applications CSV exported successfully' });
+  };
+
   return (
     <div className="space-y-6">
-      <PageHeader title="Applications" description="View every application across the platform. Search and filter by status or applicant." />
+      <PageHeader title="Applications" description="View every application across the platform. Search and filter by status or applicant.">
+        <button onClick={handleDownloadAllResumes} className="inline-flex items-center gap-1.5 rounded-xl bg-violet-600 px-3.5 py-2 text-xs font-semibold text-white hover:bg-violet-700">
+          <Download className="h-3.5 w-3.5" /> Download All Applicant Resumes
+        </button>
+        <button onClick={handleExportApplicationsCsv} className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-white px-3.5 py-2 text-xs font-semibold text-foreground hover:bg-muted">
+          <FileText className="h-3.5 w-3.5" /> Export Applications CSV
+        </button>
+      </PageHeader>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative flex-1 sm:max-w-sm">
@@ -64,11 +128,12 @@ export default function AdminApplications() {
                   <th className="px-5 py-3 font-semibold">Startup</th>
                   <th className="px-5 py-3 font-semibold">Links</th>
                   <th className="px-5 py-3 font-semibold">Status</th>
+                  <th className="px-5 py-3 font-semibold">Details</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {filtered.map(a => (
-                  <tr key={a.id} className="transition hover:bg-muted/30">
+                  <tr key={a.id} className="cursor-pointer transition hover:bg-muted/30" onClick={() => navigate(`/admin/applications/${a.id}`)}>
                     <td className="px-5 py-3.5">
                       <p className="font-medium text-foreground">{a.student_name}</p>
                       <p className="text-xs text-muted-foreground">{a.student_email}</p>
@@ -84,6 +149,17 @@ export default function AdminApplications() {
                       </div>
                     </td>
                     <td className="px-5 py-3.5"><StatusBadge status={a.status} /></td>
+                    <td className="px-5 py-3.5">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/admin/applications/${a.id}`);
+                        }}
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-violet-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-violet-700"
+                      >
+                        <Eye className="h-3.5 w-3.5" /> View
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

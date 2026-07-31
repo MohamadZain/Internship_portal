@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Search, FileText, Bell, Plus, Users, ShieldCheck,
-  Sparkles, ListChecks, Briefcase, Building2, Menu, X, ChevronDown
+  Sparkles, ListChecks, Building2, Menu, X, ChevronDown
 } from 'lucide-react';
 import { useRole } from '@/lib/RoleContext';
 import { cn } from '@/lib/utils';
@@ -16,7 +16,6 @@ const NAV = {
   ],
   startup: [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { to: '/startup/internships', label: 'My Internships', icon: Briefcase },
     { to: '/startup/create-internship', label: 'Create Internship', icon: Plus },
     { to: '/startup/shortlisted', label: 'Shortlisted Candidates', icon: Users },
   ],
