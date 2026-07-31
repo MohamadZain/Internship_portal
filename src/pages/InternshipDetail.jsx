@@ -1,15 +1,16 @@
-const db = globalThis.__B44_DB__ || { auth:{ isAuthenticated: async()=>false, me: async()=>null }, entities:new Proxy({}, { get:()=>({ filter:async()=>[], get:async()=>null, create:async()=>({}), update:async()=>({}), delete:async()=>({}) }) }), integrations:{ Core:{ UploadFile:async()=>({ file_url:'' }) } } };
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Building2, Clock, MapPin, Calendar, CheckCircle2,
   Upload, Linkedin, Github, Globe, Loader2, X
 } from 'lucide-react';
+import { db } from '@/api/base44Client';
 
 import { useToast } from '@/components/ui/use-toast';
 import Loading from '@/components/Loading';
 import StatusBadge from '@/components/StatusBadge';
+
+const LEGACY_OPTIONAL_KEYS = new Set(['linkedin', 'github', 'portfolio', 'cover_letter']);
 
 export default function InternshipDetail() {
   const { id } = useParams();
@@ -21,11 +22,56 @@ export default function InternshipDetail() {
   const [submitting, setSubmitting] = useState(false);
   const [resumeUrl, setResumeUrl] = useState('');
   const [uploadingResume, setUploadingResume] = useState(false);
-  const [form, setForm] = useState({ name: '', email: '', university: '', major: '', linkedin: '', github: '', portfolio: '', cover_letter: '' });
+  const [applicationDescription, setApplicationDescription] = useState('');
+  const [customFieldValues, setCustomFieldValues] = useState({});
+  const [questionAnswers, setQuestionAnswers] = useState({});
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    university: '',
+    major: '',
+    linkedin: '',
+    github: '',
+    portfolio: '',
+    website: '',
+    cover_letter: '',
+  });
 
   useEffect(() => {
     db.entities.Internship.get(id).then(d => { setInternship(d); setLoading(false); }).catch(() => setLoading(false));
   }, [id]);
+
+  const applicationConfig = internship?.application_form_config || null;
+  const hasConfiguredForm = Boolean(applicationConfig?.mandatory_fields);
+
+  const mandatoryKeys = useMemo(() => (
+    new Set((applicationConfig?.mandatory_fields || []).map((field) => field.key))
+  ), [applicationConfig]);
+
+  const optionalFieldMap = useMemo(() => {
+    const map = new Map();
+    (applicationConfig?.optional_fields || []).forEach((field) => {
+      map.set(field.key, field);
+    });
+    return map;
+  }, [applicationConfig]);
+
+  const customFields = useMemo(() => applicationConfig?.custom_fields || [], [applicationConfig]);
+  const customQuestions = useMemo(() => applicationConfig?.custom_questions || [], [applicationConfig]);
+
+  const showOptionalField = (key) => {
+    if (!hasConfiguredForm) return LEGACY_OPTIONAL_KEYS.has(key);
+    return optionalFieldMap.has(key);
+  };
+
+  const isOptionalRequired = (key) => {
+    if (!hasConfiguredForm) return false;
+    return Boolean(optionalFieldMap.get(key)?.required);
+  };
+
+  const showConfiguredDescription = hasConfiguredForm && mandatoryKeys.has('description');
+  const showConfiguredCoverLetter = hasConfiguredForm && showOptionalField('cover_letter');
+  const showLegacyUniversityMajor = !hasConfiguredForm;
 
   const handleResumeUpload = async (file) => {
     if (!file) return;
@@ -41,13 +87,74 @@ export default function InternshipDetail() {
     }
   };
 
+  const validateConfiguredFields = () => {
+    if (showConfiguredDescription && !applicationDescription.trim()) {
+      toast({ title: 'Description is required for this application.', variant: 'destructive' });
+      return false;
+    }
+
+    const optionalRequiredChecks = ['portfolio', 'linkedin', 'github', 'website', 'cover_letter'];
+    for (const key of optionalRequiredChecks) {
+      if (showOptionalField(key) && isOptionalRequired(key) && !String(form[key] || '').trim()) {
+        const label = (optionalFieldMap.get(key)?.label || key).replace(/_/g, ' ');
+        toast({ title: `${label} is required for this application.`, variant: 'destructive' });
+        return false;
+      }
+    }
+
+    for (const field of customFields) {
+      if (field.required && !String(customFieldValues[field.key] || '').trim()) {
+        toast({ title: `${field.label} is required.`, variant: 'destructive' });
+        return false;
+      }
+    }
+
+    for (const question of customQuestions) {
+      if (question.required && !String(questionAnswers[question.id] || '').trim()) {
+        toast({ title: 'Please answer all mandatory custom questions.', variant: 'destructive' });
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   const handleSubmit = async () => {
     if (!form.name || !form.email || !resumeUrl) {
       toast({ title: 'Please fill your name, email, and upload a resume.', variant: 'destructive' });
       return;
     }
+    if (hasConfiguredForm && !validateConfiguredFields()) {
+      return;
+    }
+
     setSubmitting(true);
     try {
+      const existingApplications = await db.entities.Application.filter({ internship_id: id }, '-created_date', 1000);
+      const normalizedEmail = String(form.email).trim().toLowerCase();
+      const alreadyApplied = (existingApplications || []).some(
+        (application) => String(application.student_email || '').trim().toLowerCase() === normalizedEmail
+      );
+
+      if (alreadyApplied) {
+        toast({ title: 'You have already applied for this internship.', variant: 'destructive' });
+        setSubmitting(false);
+        return;
+      }
+
+      const questionResponses = customQuestions.map((question) => ({
+        question: question.question,
+        answer: questionAnswers[question.id] || '',
+        required: Boolean(question.required),
+      }));
+
+      const customFieldResponses = customFields.map((field) => ({
+        key: field.key,
+        label: field.label,
+        value: customFieldValues[field.key] || '',
+        required: Boolean(field.required),
+      }));
+
       await db.entities.Application.create({
         internship_id: id,
         internship_title: internship.title,
@@ -55,13 +162,18 @@ export default function InternshipDetail() {
         startup_name: internship.startup_name,
         student_name: form.name,
         student_email: form.email,
-        student_university: form.university,
-        student_major: form.major,
+        student_university: showLegacyUniversityMajor ? form.university : undefined,
+        student_major: showLegacyUniversityMajor ? form.major : undefined,
         resume_url: resumeUrl,
-        linkedin: form.linkedin,
-        github: form.github,
-        portfolio: form.portfolio,
-        cover_letter: form.cover_letter,
+        linkedin: showOptionalField('linkedin') ? form.linkedin : undefined,
+        github: showOptionalField('github') ? form.github : undefined,
+        portfolio: showOptionalField('portfolio') ? form.portfolio : undefined,
+        website: showOptionalField('website') ? form.website : undefined,
+        cover_letter: hasConfiguredForm ? (showConfiguredCoverLetter ? form.cover_letter : undefined) : form.cover_letter,
+        application_description: showConfiguredDescription ? applicationDescription : undefined,
+        application_answers: questionResponses,
+        custom_field_answers: customFieldResponses,
+        application_form_snapshot: hasConfiguredForm ? applicationConfig : undefined,
         status: 'applied',
       });
       toast({ title: 'Application submitted!', description: 'The startup and QSTP will review your application.' });
@@ -154,7 +266,6 @@ export default function InternshipDetail() {
         </div>
       </div>
 
-      {/* Apply Dialog */}
       {applyOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => !submitting && setApplyOpen(false)} />
@@ -172,16 +283,19 @@ export default function InternshipDetail() {
                   <input className="qstp-input" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="you@email.com" />
                 </Field>
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <Field label="University">
-                  <input className="qstp-input" value={form.university} onChange={e => setForm({ ...form, university: e.target.value })} placeholder="e.g. Carnegie Mellon Qatar" />
-                </Field>
-                <Field label="Major">
-                  <input className="qstp-input" value={form.major} onChange={e => setForm({ ...form, major: e.target.value })} placeholder="e.g. Computer Science" />
-                </Field>
-              </div>
 
-              <Field label="Resume *">
+              {showLegacyUniversityMajor && (
+                <div className="grid grid-cols-2 gap-3">
+                  <Field label="University">
+                    <input className="qstp-input" value={form.university} onChange={e => setForm({ ...form, university: e.target.value })} placeholder="e.g. Carnegie Mellon Qatar" />
+                  </Field>
+                  <Field label="Major">
+                    <input className="qstp-input" value={form.major} onChange={e => setForm({ ...form, major: e.target.value })} placeholder="e.g. Computer Science" />
+                  </Field>
+                </div>
+              )}
+
+              <Field label="Resume / CV *">
                 {resumeUrl ? (
                   <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2.5">
                     <span className="flex items-center gap-2 text-sm text-emerald-700"><CheckCircle2 className="h-4 w-4" /> Resume uploaded</span>
@@ -197,29 +311,72 @@ export default function InternshipDetail() {
                 )}
               </Field>
 
-              <Field label="LinkedIn">
-                <div className="relative">
-                  <Linkedin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <input className="qstp-input pl-9" value={form.linkedin} onChange={e => setForm({ ...form, linkedin: e.target.value })} placeholder="linkedin.com/in/username" />
-                </div>
-              </Field>
-              <div className="grid grid-cols-2 gap-3">
-                <Field label="GitHub">
+              {showConfiguredDescription && (
+                <Field label="Description *">
+                  <textarea rows={3} className="qstp-input resize-none" value={applicationDescription} onChange={e => setApplicationDescription(e.target.value)} placeholder="Describe your fit for this internship..." />
+                </Field>
+              )}
+
+              {showConfiguredCoverLetter && (
+                <Field label={`Cover Letter${isOptionalRequired('cover_letter') ? ' *' : ''}`}>
+                  <textarea rows={3} className="qstp-input resize-none" value={form.cover_letter} onChange={e => setForm({ ...form, cover_letter: e.target.value })} placeholder="Write a cover letter..." />
+                </Field>
+              )}
+
+              {!hasConfiguredForm && (
+                <Field label="Cover letter">
+                  <textarea rows={3} className="qstp-input resize-none" value={form.cover_letter} onChange={e => setForm({ ...form, cover_letter: e.target.value })} placeholder="Tell us why you're a great fit…" />
+                </Field>
+              )}
+
+              {showOptionalField('linkedin') && (
+                <Field label={`LinkedIn${isOptionalRequired('linkedin') ? ' *' : ''}`}>
                   <div className="relative">
-                    <Github className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <input className="qstp-input pl-9" value={form.github} onChange={e => setForm({ ...form, github: e.target.value })} placeholder="github.com/username" />
+                    <Linkedin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <input className="qstp-input pl-9" value={form.linkedin} onChange={e => setForm({ ...form, linkedin: e.target.value })} placeholder="linkedin.com/in/username" />
                   </div>
                 </Field>
-                <Field label="Portfolio">
+              )}
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {showOptionalField('github') && (
+                  <Field label={`Github${isOptionalRequired('github') ? ' *' : ''}`}>
+                    <div className="relative">
+                      <Github className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <input className="qstp-input pl-9" value={form.github} onChange={e => setForm({ ...form, github: e.target.value })} placeholder="github.com/username" />
+                    </div>
+                  </Field>
+                )}
+                {showOptionalField('portfolio') && (
+                  <Field label={`Portfolio${isOptionalRequired('portfolio') ? ' *' : ''}`}>
+                    <div className="relative">
+                      <Globe className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <input className="qstp-input pl-9" value={form.portfolio} onChange={e => setForm({ ...form, portfolio: e.target.value })} placeholder="portfolio url" />
+                    </div>
+                  </Field>
+                )}
+              </div>
+
+              {showOptionalField('website') && (
+                <Field label={`Website${isOptionalRequired('website') ? ' *' : ''}`}>
                   <div className="relative">
                     <Globe className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <input className="qstp-input pl-9" value={form.portfolio} onChange={e => setForm({ ...form, portfolio: e.target.value })} placeholder="yoursite.com" />
+                    <input className="qstp-input pl-9" value={form.website} onChange={e => setForm({ ...form, website: e.target.value })} placeholder="https://yourwebsite.com" />
                   </div>
                 </Field>
-              </div>
-              <Field label="Cover letter">
-                <textarea rows={3} className="qstp-input resize-none" value={form.cover_letter} onChange={e => setForm({ ...form, cover_letter: e.target.value })} placeholder="Tell us why you're a great fit…" />
-              </Field>
+              )}
+
+              {customFields.map((field) => (
+                <Field key={field.key} label={`${field.label}${field.required ? ' *' : ''}`}>
+                  <input className="qstp-input" value={customFieldValues[field.key] || ''} onChange={e => setCustomFieldValues({ ...customFieldValues, [field.key]: e.target.value })} placeholder={field.label} />
+                </Field>
+              ))}
+
+              {customQuestions.map((question) => (
+                <Field key={question.id} label={`${question.question}${question.required ? ' *' : ''}`}>
+                  <textarea rows={3} className="qstp-input resize-none" value={questionAnswers[question.id] || ''} onChange={e => setQuestionAnswers({ ...questionAnswers, [question.id]: e.target.value })} placeholder="Your answer..." />
+                </Field>
+              ))}
             </div>
             <div className="flex justify-end gap-2 border-t border-border px-6 py-4">
               <button onClick={() => setApplyOpen(false)} className="rounded-xl px-4 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted" disabled={submitting}>Cancel</button>
