@@ -125,6 +125,7 @@ export default function CreateInternship() {
     const customFieldConfig = customFields.map(({ id, ...rest }) => rest);
     const customQuestionConfig = customQuestions.map(({ id, ...rest }) => rest);
 
+
     return {
       mandatory_fields: MANDATORY_FIELDS,
       optional_fields: optional,
@@ -160,6 +161,18 @@ export default function CreateInternship() {
     }
   };
 
+
+    const generateDescription = async () => {
+  // Later:
+  // const response = await fetch(...);
+  // const data = await response.json();
+
+  setForm({
+    ...form,
+    description: "Here is generic description " + form.title
+  });
+};
+
   return (
     <div className="space-y-6">
       <PageHeader title="Create Internship" description="Create a new internship posting and fully configure the student application form." />
@@ -178,7 +191,31 @@ export default function CreateInternship() {
         </div>
 
         <div className="mt-4 space-y-4">
-          <Field label="Description *"><textarea rows={4} className="qstp-input resize-none" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} /></Field>
+          <Field
+  label={
+    <div className="flex items-center gap-2">
+      <span>Description *</span>
+
+      <button
+        type="button"
+        title="Generate Description with AI"
+        onClick={generateDescription}
+        className="rounded-md border border-purple-200 bg-purple-50 px-2 py-1 text-xs font-medium text-purple-600 transition-all duration-200 hover:border-purple-300 hover:bg-purple-100 hover:text-purple-700"
+      >
+        ✨ AI
+      </button>
+    </div>
+  }
+>
+  <textarea
+    rows={4}
+    className="qstp-input resize-none"
+    value={form.description}
+    onChange={e =>
+      setForm({ ...form, description: e.target.value })
+    }
+  />
+</Field>
           <Field label="Responsibilities"><textarea rows={3} className="qstp-input resize-none" value={form.responsibilities} onChange={e => setForm({ ...form, responsibilities: e.target.value })} /></Field>
           <Field label="Requirements"><textarea rows={3} className="qstp-input resize-none" value={form.requirements} onChange={e => setForm({ ...form, requirements: e.target.value })} /></Field>
         </div>
