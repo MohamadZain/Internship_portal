@@ -1,0 +1,301 @@
+[
+  {
+    "id": "user_admin_001",
+    "email": "admin@qstp.local",
+    "password": "admin123",
+    "role": "admin",
+    "name": "Local Admin",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_startup_001",
+    "email": "startup@local.dev",
+    "password": "startup123",
+    "role": "startup",
+    "name": "Local Startup",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_001",
+    "email": "student@local.dev",
+    "password": "student123",
+    "role": "student",
+    "name": "Local Student",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+
+  {
+    "id": "user_startup_002",
+    "email": "pixelcraft@startup.local",
+    "password": "startup123",
+    "role": "startup",
+    "name": "Omar Al-Hassan",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_startup_003",
+    "email": "admin@cloudnest.local",
+    "password": "startup123",
+    "role": "startup",
+    "name": "Sara Rahman",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_startup_004",
+    "email": "founder@finova.local",
+    "password": "startup123",
+    "role": "startup",
+    "name": "Khalid Al-Mansoori",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_startup_005",
+    "email": "team@greenloop.local",
+    "password": "startup123",
+    "role": "startup",
+    "name": "Mariam Abdullah",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_startup_006",
+    "email": "hello@eduvista.local",
+    "password": "startup123",
+    "role": "startup",
+    "name": "Daniel Thomas",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_startup_007",
+    "email": "founder@marketmint.local",
+    "password": "startup123",
+    "role": "startup",
+    "name": "Aisha Khan",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_startup_008",
+    "email": "team@cyphergrid.local",
+    "password": "startup123",
+    "role": "startup",
+    "name": "Youssef Ibrahim",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_startup_009",
+    "email": "hello@buildspace.local",
+    "password": "startup123",
+    "role": "startup",
+    "name": "Fatima Al-Mansoori",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_startup_010",
+    "email": "founder@talentloop.local",
+    "password": "startup123",
+    "role": "startup",
+    "name": "Reem Al-Hajri",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_startup_011",
+    "email": "insightlabs@startup.local",
+    "password": "startup123",
+    "role": "startup",
+    "name": "Adam Martin",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+
+  {
+    "id": "user_student_002",
+    "email": "sara@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Sara Ali",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_003",
+    "email": "omar.hassan@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Omar Hassan",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_004",
+    "email": "layla.nasser@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Layla Nasser",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_005",
+    "email": "mohammed.saleh@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Mohammed Saleh",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_006",
+    "email": "noor.ahmed@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Noor Ahmed",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_007",
+    "email": "khalid.ali@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Khalid Ali",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_008",
+    "email": "maya.george@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Maya George",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_009",
+    "email": "youssef.ahmed@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Youssef Ahmed",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_010",
+    "email": "fatima.khan@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Fatima Khan",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_011",
+    "email": "adam.wilson@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Adam Wilson",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_012",
+    "email": "reem.mohammed@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Reem Mohammed",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_013",
+    "email": "daniel.joseph@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Daniel Joseph",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_014",
+    "email": "hana.kim@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Hana Kim",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_015",
+    "email": "bilal.siddiqui@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Bilal Siddiqui",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_016",
+    "email": "reem.ahmed@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Reem Ahmed",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_017",
+    "email": "faisal.nasser@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Faisal Nasser",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_018",
+    "email": "elena.petrova@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Elena Petrova",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_019",
+    "email": "ali.mansoor@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Ali Mansoor",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_020",
+    "email": "noura.khalid@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Noura Khalid",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  },
+  {
+    "id": "user_student_021",
+    "email": "zain.abdullah@student.local",
+    "password": "student123",
+    "role": "student",
+    "name": "Zain Abdullah",
+    "verified": true,
+    "created_date": "2026-07-31T00:00:00.000Z"
+  }
+]

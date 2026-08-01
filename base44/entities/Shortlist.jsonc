@@ -1,0 +1,31 @@
+{
+  "name": "Shortlist",
+  "type": "object",
+  "properties": {
+    "internship_id": {
+      "type": "string"
+    },
+    "internship_title": {
+      "type": "string"
+    },
+    "startup_id": {
+      "type": "string"
+    },
+    "application_id": {
+      "type": "string"
+    },
+    "candidate_name": {
+      "type": "string"
+    },
+    "resume_url": {
+      "type": "string"
+    },
+    "ai_summary": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "internship_id",
+    "candidate_name"
+  ]
+}

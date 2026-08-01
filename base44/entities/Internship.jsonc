@@ -1,0 +1,58 @@
+{
+  "name": "Internship",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "startup_id": {
+      "type": "string"
+    },
+    "startup_name": {
+      "type": "string"
+    },
+    "skills_required": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "responsibilities": {
+      "type": "string"
+    },
+    "requirements": {
+      "type": "string"
+    },
+    "duration": {
+      "type": "string"
+    },
+    "deadline": {
+      "type": "string",
+      "format": "date"
+    },
+    "location": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "pending_approval",
+        "published",
+        "closed"
+      ],
+      "default": "draft"
+    },
+    "is_featured": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "title",
+    "startup_id"
+  ]
+}
