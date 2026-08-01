@@ -19,7 +19,8 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 5
   },
   {
     "id": "application_002",
@@ -61,13 +62,20 @@
     "cover_letter": "Data analysis is closely aligned with my degree and is an area I would like to gain practical experience in.",
     "application_description": "I have used Python, pandas, matplotlib, and SQL in university projects.",
     "application_answers": [
-      {"question": "Why are you interested in this role?", "answer": "I want to apply my data analysis coursework to real business datasets."}
+      {
+        "question": "Why are you interested in this role?",
+        "answer": "I want to apply my data analysis coursework to real business datasets."
+      }
     ],
     "custom_field_answers": [
-      {"field": "python_experience", "value": "2 years"}
+      {
+        "field": "python_experience",
+        "value": "2 years"
+      }
     ],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 97
   },
   {
     "id": "application_004",
@@ -91,7 +99,6 @@
     "application_form_snapshot": null,
     "status": "applied"
   },
-
   {
     "id": "application_005",
     "internship_id": "internship_001",
@@ -112,7 +119,8 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 86
   },
   {
     "id": "application_006",
@@ -136,7 +144,6 @@
     "application_form_snapshot": null,
     "status": "applied"
   },
-
   {
     "id": "application_007",
     "internship_id": "internship_005",
@@ -179,9 +186,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 64
   },
-
   {
     "id": "application_009",
     "internship_id": "internship_007",
@@ -202,7 +209,8 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 29
   },
   {
     "id": "application_010",
@@ -226,7 +234,6 @@
     "application_form_snapshot": null,
     "status": "applied"
   },
-
   {
     "id": "application_011",
     "internship_id": "internship_009",
@@ -247,7 +254,8 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 21
   },
   {
     "id": "application_012",
@@ -269,9 +277,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 1
   },
-
   {
     "id": "application_013",
     "internship_id": "internship_021",
@@ -314,7 +322,8 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 61
   },
   {
     "id": "application_015",
@@ -336,9 +345,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 25
   },
-
   {
     "id": "application_016",
     "internship_id": "internship_017",
@@ -359,7 +368,8 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 6
   },
   {
     "id": "application_017",
@@ -381,9 +391,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 66
   },
-
   {
     "id": "application_018",
     "internship_id": "internship_010",
@@ -404,7 +414,8 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 75
   },
   {
     "id": "application_019",
@@ -448,9 +459,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 59
   },
-
   {
     "id": "application_021",
     "internship_id": "internship_014",
@@ -471,7 +482,8 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 49
   },
   {
     "id": "application_022",
@@ -495,7 +507,6 @@
     "application_form_snapshot": null,
     "status": "applied"
   },
-
   {
     "id": "application_023",
     "internship_id": "internship_011",
@@ -516,7 +527,8 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 100
   },
   {
     "id": "application_024",
@@ -538,9 +550,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 50
   },
-
   {
     "id": "application_025",
     "internship_id": "internship_015",
@@ -561,7 +573,8 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 51
   },
   {
     "id": "application_026",
@@ -585,7 +598,6 @@
     "application_form_snapshot": null,
     "status": "applied"
   },
-
   {
     "id": "application_027",
     "internship_id": "internship_007",
@@ -606,7 +618,8 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 55
   },
   {
     "id": "application_028",
@@ -628,9 +641,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 17
   },
-
   {
     "id": "application_029",
     "internship_id": "internship_017",
@@ -651,7 +664,8 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 12
   },
   {
     "id": "application_030",
@@ -673,9 +687,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 87
   },
-
   {
     "id": "application_031",
     "internship_id": "internship_021",
@@ -696,7 +710,8 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 24
   },
   {
     "id": "application_032",
@@ -720,7 +735,6 @@
     "application_form_snapshot": null,
     "status": "applied"
   },
-
   {
     "id": "application_033",
     "internship_id": "internship_019",
@@ -741,9 +755,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 61
   },
-
   {
     "id": "application_034",
     "internship_id": "internship_020",
@@ -764,9 +778,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 69
   },
-
   {
     "id": "application_035",
     "internship_id": "internship_012",
@@ -787,9 +801,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 48
   },
-
   {
     "id": "application_036",
     "internship_id": "internship_003",
@@ -812,7 +826,6 @@
     "application_form_snapshot": null,
     "status": "applied"
   },
-
   {
     "id": "application_037",
     "internship_id": "internship_016",
@@ -833,9 +846,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 97
   },
-
   {
     "id": "application_038",
     "internship_id": "internship_004",
@@ -858,7 +871,6 @@
     "application_form_snapshot": null,
     "status": "applied"
   },
-
   {
     "id": "application_039",
     "internship_id": "internship_006",
@@ -879,9 +891,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 58
   },
-
   {
     "id": "application_040",
     "internship_id": "internship_005",
@@ -902,7 +914,8 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 94
   },
   {
     "id": "application_041",
@@ -924,9 +937,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 52
   },
-
   {
     "id": "application_042",
     "internship_id": "internship_015",
@@ -947,9 +960,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 32
   },
-
   {
     "id": "application_043",
     "internship_id": "internship_019",
@@ -970,9 +983,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 58
   },
-
   {
     "id": "application_044",
     "internship_id": "internship_012",
@@ -993,9 +1006,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 21
   },
-
   {
     "id": "application_045",
     "internship_id": "internship_020",
@@ -1016,9 +1029,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 72
   },
-
   {
     "id": "application_046",
     "internship_id": "internship_008",
@@ -1041,7 +1054,6 @@
     "application_form_snapshot": null,
     "status": "applied"
   },
-
   {
     "id": "application_047",
     "internship_id": "internship_024",
@@ -1062,9 +1074,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 65
   },
-
   {
     "id": "application_048",
     "internship_id": "internship_023",
@@ -1087,7 +1099,6 @@
     "application_form_snapshot": null,
     "status": "applied"
   },
-
   {
     "id": "application_049",
     "internship_id": "internship_010",
@@ -1108,9 +1119,9 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 37
   },
-
   {
     "id": "application_050",
     "internship_id": "internship_002",
@@ -1131,6 +1142,7 @@
     "application_answers": [],
     "custom_field_answers": [],
     "application_form_snapshot": null,
-    "status": "applied"
+    "status": "applied",
+    "coverLetterAIScore": 81
   }
 ]
