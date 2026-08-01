@@ -127,6 +127,7 @@ export default function AdminApplications() {
                   <th className="px-5 py-3 font-semibold">Internship</th>
                   <th className="px-5 py-3 font-semibold">Startup</th>
                   <th className="px-5 py-3 font-semibold">Links</th>
+                  <th className="px-5 py-3 font-semibold">AI Usage</th>
                   <th className="px-5 py-3 font-semibold">Status</th>
                   <th className="px-5 py-3 font-semibold">Details</th>
                 </tr>
@@ -147,6 +148,19 @@ export default function AdminApplications() {
                         {a.github && <a href={a.github} target="_blank" rel="noreferrer" className="hover:text-violet-600" title="GitHub"><Github className="h-4 w-4" /></a>}
                         {a.portfolio && <a href={a.portfolio} target="_blank" rel="noreferrer" className="hover:text-violet-600" title="Portfolio"><Globe className="h-4 w-4" /></a>}
                       </div>
+                    </td>
+                    <td className="px-5 py-3.5">
+                      {typeof a.coverLetterAIScore === 'number' ? (
+                        <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${
+                          a.coverLetterAIScore < 50 
+                            ? 'bg-emerald-50 text-emerald-700 ring-emerald-600/20' 
+                            : 'bg-rose-50 text-rose-700 ring-rose-600/20'
+                        }`}>
+                          {a.coverLetterAIScore}%
+                        </span>
+                      ) : (
+                        <span className="text-muted-foreground text-xs">—</span>
+                      )}
                     </td>
                     <td className="px-5 py-3.5"><StatusBadge status={a.status} /></td>
                     <td className="px-5 py-3.5">
