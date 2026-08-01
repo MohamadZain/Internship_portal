@@ -26,7 +26,6 @@ const NAV = {
     { to: '/admin/startups', label: 'Startup Management', icon: Building2 },
     { to: '/admin/internship-approval', label: 'Internship Approval', icon: ShieldCheck },
     { to: '/admin/applications', label: 'Applications', icon: FileText },
-    { to: '/admin/analyze-candidates', label: 'Analyze Candidates', icon: Sparkles },
     { to: '/admin/shortlists', label: 'Shortlists', icon: ListChecks },
   ],
 };

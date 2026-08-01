@@ -10,11 +10,11 @@ import EmptyState from '@/components/EmptyState';
 export default function StartupDashboard() {
   const { data: internships, loading } = useEntityList('Internship', { sort: '-created_date' });
   const { data: applications } = useEntityList('Application', { sort: '-created_date' });
-  const { data: shortlists } = useEntityList('Shortlist', { sort: '-created_date' });
 
   const pending = internships?.filter(i => i.status === 'pending_approval') || [];
   const totalInternships = internships?.length || 0;
   const totalApplications = applications?.length || 0;
+  const shortlistedCount = applications?.filter(a => a.status === 'shortlisted').length || 0;
 
   return (
     <div className="space-y-7">
@@ -31,7 +31,7 @@ export default function StartupDashboard() {
         <StatCard icon={Briefcase} label="Total Internships" value={loading ? '—' : totalInternships} accent="violet" />
         <StatCard icon={FileText} label="Applications Received" value={loading ? '—' : totalApplications} accent="blue" />
         <StatCard icon={Clock} label="Pending Approval" value={loading ? '—' : pending.length} accent="amber" sublabel="Awaiting QSTP review" />
-        <StatCard icon={Users} label="Shortlisted Candidates" value={shortlists?.length || 0} accent="emerald" sublabel="Ready to review" />
+        <StatCard icon={Users} label="Shortlisted Candidates" value={shortlistedCount} accent="emerald" sublabel="Ready to review" />
       </div>
 
       <div className="space-y-4">

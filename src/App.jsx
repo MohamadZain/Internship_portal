@@ -28,6 +28,7 @@ import ApplicationDetails from '@/pages/admin/ApplicationDetails';
 import AnalyzeCandidates from '@/pages/admin/AnalyzeCandidates';
 import TopCandidates from '@/pages/admin/TopCandidates';
 import Shortlists from '@/pages/admin/Shortlists';
+import ShortlistDetail from '@/pages/admin/ShortlistDetail';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -77,6 +78,7 @@ const AuthenticatedApp = () => {
           <Route path="/admin/analyze-candidates" element={<AnalyzeCandidates />} />
           <Route path="/admin/top-candidates" element={<TopCandidates />} />
           <Route path="/admin/shortlists" element={<Shortlists />} />
+          <Route path="/admin/shortlists/:id" element={<ShortlistDetail />} />
         </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />

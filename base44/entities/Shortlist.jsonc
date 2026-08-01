@@ -2,30 +2,56 @@
   "name": "Shortlist",
   "type": "object",
   "properties": {
+    "startup_id": {
+      "type": "string"
+    },
+    "startup_name": {
+      "type": "string"
+    },
     "internship_id": {
       "type": "string"
     },
     "internship_title": {
       "type": "string"
     },
-    "startup_id": {
-      "type": "string"
+    "top_count": {
+      "type": "number"
     },
-    "application_id": {
-      "type": "string"
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "published"
+      ],
+      "default": "draft"
     },
-    "candidate_name": {
-      "type": "string"
-    },
-    "resume_url": {
-      "type": "string"
-    },
-    "ai_summary": {
-      "type": "string"
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "application_id": { "type": "string" },
+          "candidate_name": { "type": "string" },
+          "student_university": { "type": "string" },
+          "student_major": { "type": "string" },
+          "resume_url": { "type": "string" },
+          "ai_summary": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": [
+              "under_review",
+              "approved",
+              "rejected",
+              "shortlisted"
+            ],
+            "default": "under_review"
+          }
+        }
+      }
     }
   },
   "required": [
     "internship_id",
-    "candidate_name"
+    "startup_id"
   ]
 }

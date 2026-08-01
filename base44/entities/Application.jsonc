@@ -23,6 +23,16 @@
     "student_major": {
       "type": "string"
     },
+    "student_academic_year": {
+      "type": "string",
+      "enum": [
+        "1st Year",
+        "2nd Year",
+        "3rd Year",
+        "4th Year",
+        "Fresh Graduate"
+      ]
+    },
     "resume_url": {
       "type": "string"
     },

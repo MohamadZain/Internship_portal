@@ -140,25 +140,6 @@ export default function InternshipDetail() {
     }
 
     setSubmitting(true);
-    let coverLetterAIScore = null;
-    if (form.cover_letter?.trim()) {
-      try {
-        const saplingResponse = await fetch("https://api.sapling.ai/api/v1/aidetect", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ key: "FVIT634YVT0MTEMENPXCM2KF2X7VF4WF", text: form.cover_letter })
-        });
-        if (saplingResponse.ok) {
-          const data = await saplingResponse.json();
-          if (typeof data.score === 'number') {
-            coverLetterAIScore = Math.round(data.score * 100);
-          }
-        }
-      } catch (err) {
-        console.error("Failed to get AI score:", err);
-      }
-    }
-
     try {
       const existingApplications = await db.entities.Application.filter({ internship_id: id }, '-created_date', 1000);
       const normalizedEmail = String(user?.email || form.email).trim().toLowerCase();
@@ -208,7 +189,6 @@ export default function InternshipDetail() {
         custom_field_answers: customFieldResponses,
         application_form_snapshot: hasConfiguredForm ? applicationConfig : undefined,
         status: 'applied',
-        coverLetterAIScore,
       });
       console.log(await db.entities.Application);
       toast({ title: 'Application submitted!', description: 'The startup and QSTP will review your application.' });

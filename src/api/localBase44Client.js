@@ -281,7 +281,9 @@ const scopeRecordsForUser = (state, entityName, records, user) => {
     }
     if (entityName === "Shortlist") {
       return records.filter(
-        (shortlist) => startupIds.has(shortlist.startup_id) || ownedInternshipIds.has(shortlist.internship_id)
+        (shortlist) =>
+          shortlist.status === "published" &&
+          (startupIds.has(shortlist.startup_id) || ownedInternshipIds.has(shortlist.internship_id))
       );
     }
     if (entityName === "Notification") {

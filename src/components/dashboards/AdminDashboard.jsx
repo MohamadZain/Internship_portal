@@ -9,11 +9,11 @@ export default function AdminDashboard() {
   const { data: startups, loading: ls } = useEntityList('Startup', { sort: '-created_date' });
   const { data: internships, loading: li } = useEntityList('Internship', { sort: '-created_date' });
   const { data: applications, loading: la } = useEntityList('Application', { sort: '-created_date' });
-  const { data: shortlists } = useEntityList('Shortlist', { sort: '-created_date' });
 
   const approvedStartups = startups?.filter(s => s.status === 'approved') || [];
   const pendingInternships = internships?.filter(i => i.status === 'pending_approval') || [];
   const pendingStartups = startups?.filter(s => s.status === 'pending') || [];
+  const shortlistedApplications = applications?.filter(a => a.status === 'shortlisted') || [];
 
   return (
     <div className="space-y-7">
@@ -27,8 +27,8 @@ export default function AdminDashboard() {
             <h1 className="mt-4 text-2xl font-bold tracking-tight sm:text-3xl">Program Overview</h1>
             <p className="mt-2 max-w-md text-sm text-white/70">Manage startups, approve internships, and use Deema AI to shortlist top candidates.</p>
           </div>
-          <Link to="/admin/analyze-candidates" className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-violet-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/30 transition hover:bg-violet-400">
-            <Sparkles className="h-4 w-4" /> Analyze Candidates
+          <Link to="/admin/applications" className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-violet-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/30 transition hover:bg-violet-400">
+            <Sparkles className="h-4 w-4" /> Analyze with Deema
           </Link>
         </div>
       </div>
@@ -37,7 +37,7 @@ export default function AdminDashboard() {
         <StatCard icon={Building2} label="Approved Startups" value={ls ? '—' : approvedStartups.length} accent="emerald" sublabel={`${pendingStartups.length} pending review`} />
         <StatCard icon={Briefcase} label="Internships" value={li ? '—' : internships?.length || 0} accent="violet" sublabel={`${pendingInternships.length} awaiting approval`} />
         <StatCard icon={FileText} label="Applications" value={la ? '—' : applications?.length || 0} accent="blue" />
-        <StatCard icon={Users} label="Shortlisted" value={shortlists?.length || 0} accent="amber" sublabel="Candidates published to startups" />
+        <StatCard icon={Users} label="Shortlisted" value={shortlistedApplications.length} accent="amber" sublabel="Candidates published to startups" />
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -91,9 +91,9 @@ export default function AdminDashboard() {
               { to: '/admin/startups', label: 'Manage Startups', icon: Building2, desc: 'Review & approve' },
               { to: '/admin/internship-approval', label: 'Approve Internships', icon: ShieldCheck, desc: 'Queue pending' },
               { to: '/admin/applications', label: 'View Applications', icon: FileText, desc: 'All applicants' },
-              { to: '/admin/analyze-candidates', label: 'Analyze with AI', icon: Sparkles, desc: 'Deema AI' },
+              { to: '/admin/shortlists', label: 'View Shortlists', icon: Sparkles, desc: 'Deema AI' },
             ].map(a => (
-              <Link key={a.to} to={a.to} className="group flex flex-col gap-2 rounded-2xl border border-border bg-white p-4 transition hover:border-violet-200 hover:shadow-md">
+              <Link key={a.label} to={a.to} className="group flex flex-col gap-2 rounded-2xl border border-border bg-white p-4 transition hover:border-violet-200 hover:shadow-md">
                 <div className="grid h-9 w-9 place-items-center rounded-lg bg-violet-50 text-violet-600"><a.icon className="h-4.5 w-4.5" /></div>
                 <p className="font-semibold text-sm text-foreground">{a.label}</p>
                 <p className="text-xs text-muted-foreground">{a.desc}</p>
