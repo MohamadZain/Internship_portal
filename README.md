@@ -1,40 +1,49 @@
-const db = globalThis.__B44_DB__ || { auth:{ isAuthenticated: async()=>false, me: async()=>null }, entities:new Proxy({}, { get:()=>({ filter:async()=>[], get:async()=>null, create:async()=>({}), update:async()=>({}), delete:async()=>({}) }) }), integrations:{ Core:{ UploadFile:async()=>({ file_url:'' }) } } };
+# Application Tracking System Deema/QSTP
 
-# Base44 Project
+A modern internship application portal for students, startups, and admins. Students can browse internships and apply with their resume and cover letter, startups can manage postings and review candidates, and admins can oversee applications and shortlists.
 
-Use this repository to run and edit the app locally, then publish changes back through db.
+## Main Features
 
-Any change pushed to the repo will also be reflected in the Base44 Builder.
+- Student internship browsing and application flow
+- Startup internship creation and candidate review
+- Admin dashboard for applications and shortlists
+- AI-assisted internship content generation for startups
 
-## Prerequisites
+## Environment Variable
 
-1. Clone the repository using the project's Git URL.
-2. Navigate to the project directory.
-3. Install dependencies: `npm install`.
-4. Install the Base44 CLI: `npm install -g base44@latest`.
+The app uses one required environment variable for the AI-assisted internship generation feature:
 
-See the [Base44 CLI docs](https://docs.db.com/developers/references/cli/get-started/overview) if you want to run Base44 commands directly.
+```env
+VITE_OPENROUTER_API_KEY=your_openrouter_api_key
+```
+inside env.local file
+
+If this variable is not set, the app will still run, but the AI generation feature will be hidden.
 
 ## Run Locally
 
-Run the full local development environment from the project root:
+1. Install dependencies:
 
 ```bash
-base44 dev
+npm install
 ```
 
-`base44 dev` starts the local Base44 development backend and, when this app is configured for it, also starts the frontend dev server for you. Use the frontend URL printed by the command.
+2. Create a local environment file named `.env.local` in the project root and add:
 
-For example, when the Base44 project config includes a `serveCommand`, `base44 dev` can launch the frontend too:
-
-```json5
-{
-  "site": {
-    "serveCommand": "npm run dev"
-  }
-}
+```env
+VITE_OPENROUTER_API_KEY=your_openrouter_api_key
 ```
 
-In a Base44 project this lives in `base44/config.jsonc`.
+3. Start the development server:
 
-## Run Only The Frontend
+```bash
+npm run dev
+```
+
+4. Open the local URL shown in the terminal.
+
+## Build for Production
+
+```bash
+npm run build
+```
