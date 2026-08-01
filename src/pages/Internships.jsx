@@ -10,6 +10,9 @@ export default function Internships() {
   const { data, loading } = useEntityList('Internship', { filter: { status: 'published' }, sort: '-created_date' });
   const [query, setQuery] = useState('');
   const [skill, setSkill] = useState('all');
+  const [internshipType, setInternshipType] = useState('all');
+  const [degreeType, setDegreeType] = useState('all');
+  const [academicYear, setAcademicYear] = useState('all');
 
   const allSkills = useMemo(() => {
     const set = new Set();
@@ -24,9 +27,12 @@ export default function Internships() {
         i.startup_name?.toLowerCase().includes(query.toLowerCase()) ||
         i.description?.toLowerCase().includes(query.toLowerCase());
       const matchesSkill = skill === 'all' || i.skills_required?.includes(skill);
-      return matchesQuery && matchesSkill;
+      const matchesInternshipType = internshipType === 'all' || i.internship_type === internshipType;
+      const matchesDegreeType = degreeType === 'all' || i.degree_type === degreeType;
+      const matchesAcademicYear = academicYear === 'all' || i.academic_year === academicYear;
+      return matchesQuery && matchesSkill && matchesInternshipType && matchesDegreeType && matchesAcademicYear;
     });
-  }, [data, query, skill]);
+  }, [data, query, skill, internshipType, degreeType, academicYear]);
 
   return (
     <div className="space-y-6">
@@ -53,6 +59,21 @@ export default function Internships() {
             {allSkills.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
         </div>
+        <select value={internshipType} onChange={e => setInternshipType(e.target.value)} className="w-full appearance-none rounded-xl border border-border bg-white py-2.5 px-3 text-sm shadow-sm outline-none transition focus:border-violet-400 sm:w-44">
+          <option value="all">All internship types</option>
+          <option value="Full-time">Full-time</option>
+          <option value="Part-time">Part-time</option>
+        </select>
+        <select value={degreeType} onChange={e => setDegreeType(e.target.value)} className="w-full appearance-none rounded-xl border border-border bg-white py-2.5 px-3 text-sm shadow-sm outline-none transition focus:border-violet-400 sm:w-40">
+          <option value="all">All degrees</option>
+          <option value="Bachelor's">Bachelor's</option>
+          <option value="Master's">Master's</option>
+          <option value="PhD">PhD</option>
+        </select>
+        <select value={academicYear} onChange={e => setAcademicYear(e.target.value)} className="w-full appearance-none rounded-xl border border-border bg-white py-2.5 px-3 text-sm shadow-sm outline-none transition focus:border-violet-400 sm:w-44">
+          <option value="all">All academic years</option>
+          {['1st Year', '2nd Year', '3rd Year', '4th Year', 'Fresh Graduate'].map((year) => <option key={year} value={year}>{year}</option>)}
+        </select>
       </div>
 
       {loading ? <Loading /> : filtered.length === 0 ? (

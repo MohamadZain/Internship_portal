@@ -31,8 +31,12 @@ export default function StartupInternships() {
                 <th className="px-5 py-3 font-semibold">Title</th>
                 <th className="px-5 py-3 font-semibold">Duration</th>
                 <th className="px-5 py-3 font-semibold">Deadline</th>
+                <th className="px-5 py-3 font-semibold">Type</th>
+                <th className="px-5 py-3 font-semibold">Degree</th>
+                <th className="px-5 py-3 font-semibold">Year</th>
                 <th className="px-5 py-3 font-semibold">Skills</th>
                 <th className="px-5 py-3 font-semibold">Status</th>
+                <th className="px-5 py-3 font-semibold">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -41,8 +45,16 @@ export default function StartupInternships() {
                   <td className="px-5 py-3 font-medium text-foreground">{i.title}</td>
                   <td className="px-5 py-3 text-muted-foreground">{i.duration || '—'}</td>
                   <td className="px-5 py-3 text-muted-foreground">{i.deadline ? new Date(i.deadline).toLocaleDateString() : '—'}</td>
+                  <td className="px-5 py-3 text-muted-foreground">{i.internship_type || '—'}</td>
+                  <td className="px-5 py-3 text-muted-foreground">{i.degree_type || '—'}</td>
+                  <td className="px-5 py-3 text-muted-foreground">{i.academic_year || '—'}</td>
                   <td className="px-5 py-3 text-muted-foreground">{i.skills_required?.join(', ') || '—'}</td>
                   <td className="px-5 py-3"><StatusBadge status={i.status || 'draft'} /></td>
+                  <td className="px-5 py-3">
+                    <Link to={`/startup/create-internship?edit=${encodeURIComponent(i.id)}`} className="text-xs font-medium text-violet-600 hover:text-violet-700">
+                      Edit
+                    </Link>
+                  </td>
                 </tr>
               ))}
             </tbody>

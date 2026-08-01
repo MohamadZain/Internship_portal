@@ -15,15 +15,21 @@ export default function InternshipApproval() {
   const { toast } = useToast();
   const [filter, setFilter] = useState('pending_approval');
   const [query, setQuery] = useState('');
+  const [internshipType, setInternshipType] = useState('all');
+  const [degreeType, setDegreeType] = useState('all');
+  const [academicYear, setAcademicYear] = useState('all');
   const [busy, setBusy] = useState(null);
 
   const filtered = useMemo(() => {
     return (data || []).filter(i => {
       const mf = filter === 'all' || i.status === filter;
       const mq = !query || i.title?.toLowerCase().includes(query.toLowerCase()) || i.startup_name?.toLowerCase().includes(query.toLowerCase());
-      return mf && mq;
+      const mt = internshipType === 'all' || i.internship_type === internshipType;
+      const md = degreeType === 'all' || i.degree_type === degreeType;
+      const my = academicYear === 'all' || i.academic_year === academicYear;
+      return mf && mq && mt && md && my;
     });
-  }, [data, filter, query]);
+  }, [data, filter, query, internshipType, degreeType, academicYear]);
 
   const setStatus = async (id, status, label) => {
     setBusy(id);
@@ -53,6 +59,23 @@ export default function InternshipApproval() {
           ))}
         </div>
       </div>
+      <div className="flex flex-wrap gap-2">
+        <select value={internshipType} onChange={e => setInternshipType(e.target.value)} className="w-full appearance-none rounded-xl border border-border bg-white py-2.5 px-3 text-sm shadow-sm outline-none transition focus:border-violet-400 sm:w-44">
+          <option value="all">All internship types</option>
+          <option value="Full-time">Full-time</option>
+          <option value="Part-time">Part-time</option>
+        </select>
+        <select value={degreeType} onChange={e => setDegreeType(e.target.value)} className="w-full appearance-none rounded-xl border border-border bg-white py-2.5 px-3 text-sm shadow-sm outline-none transition focus:border-violet-400 sm:w-40">
+          <option value="all">All degrees</option>
+          <option value="Bachelor's">Bachelor's</option>
+          <option value="Master's">Master's</option>
+          <option value="PhD">PhD</option>
+        </select>
+        <select value={academicYear} onChange={e => setAcademicYear(e.target.value)} className="w-full appearance-none rounded-xl border border-border bg-white py-2.5 px-3 text-sm shadow-sm outline-none transition focus:border-violet-400 sm:w-44">
+          <option value="all">All academic years</option>
+          {['1st Year', '2nd Year', '3rd Year', '4th Year', 'Fresh Graduate'].map((year) => <option key={year} value={year}>{year}</option>)}
+        </select>
+      </div>
 
       {loading ? <Loading /> : filtered.length === 0 ? (
         <EmptyState icon={Clock} title="No internships in this queue" description="Internships awaiting approval will appear here." />
@@ -67,6 +90,11 @@ export default function InternshipApproval() {
                     <StatusBadge status={i.status} />
                   </div>
                   <p className="mt-0.5 text-sm text-muted-foreground">{i.startup_name} · {i.duration} {i.location ? `· ${i.location}` : ''}</p>
+                  <div className="mt-1 flex flex-wrap gap-1.5">
+                    {i.internship_type ? <span className="rounded bg-violet-50 px-2 py-0.5 text-xs text-violet-700 ring-1 ring-inset ring-violet-600/10">{i.internship_type}</span> : null}
+                    {i.degree_type ? <span className="rounded bg-violet-50 px-2 py-0.5 text-xs text-violet-700 ring-1 ring-inset ring-violet-600/10">{i.degree_type}</span> : null}
+                    {i.academic_year ? <span className="rounded bg-violet-50 px-2 py-0.5 text-xs text-violet-700 ring-1 ring-inset ring-violet-600/10">{i.academic_year}</span> : null}
+                  </div>
                   <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{i.description}</p>
                   {i.skills_required?.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-1.5">

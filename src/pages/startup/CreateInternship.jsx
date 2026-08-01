@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { X, Plus, Loader2, ArrowLeft, Send, Settings2 } from 'lucide-react';
 import { db } from '@/api/base44Client';
 
@@ -20,18 +20,25 @@ const MANDATORY_FIELDS = [
   { key: 'description', label: 'Description', required: true },
 ];
 
+const INTERNSHIP_TYPES = ['Full-time', 'Part-time'];
+const DEGREE_TYPES = ["Bachelor's", "Master's", 'PhD'];
+const ACADEMIC_YEARS = ['1st Year', '2nd Year', '3rd Year', '4th Year', 'Fresh Graduate'];
+
 const makeId = (prefix) => `${prefix}_${Math.random().toString(36).slice(2, 8)}${Date.now().toString(36)}`;
 const toKey = (value) => String(value || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
 
 export default function CreateInternship() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const [submitting, setSubmitting] = useState(false);
+  const [loadingInternship, setLoadingInternship] = useState(false);
   const [skillInput, setSkillInput] = useState('');
   const [skills, setSkills] = useState([]);
   const [form, setForm] = useState({
     title: '', description: '', startup_name: '', responsibilities: '',
-    requirements: '', duration: '', deadline: '', location: ''
+    requirements: '', duration: '', deadline: '', location: '',
+    internship_type: '', degree_type: '', academic_year: ''
   });
 
   const [optionalFields, setOptionalFields] = useState(DEFAULT_OPTIONAL_FIELDS);
@@ -41,9 +48,78 @@ export default function CreateInternship() {
   const [customQuestionInput, setCustomQuestionInput] = useState('');
   const [customQuestionRequired, setCustomQuestionRequired] = useState(true);
   const [customQuestions, setCustomQuestions] = useState([]);
+  const editInternshipId = searchParams.get('edit');
 
   const enabledOptionalFields = useMemo(() => optionalFields.filter((field) => field.enabled), [optionalFields]);
   const removedOptionalFields = useMemo(() => optionalFields.filter((field) => !field.enabled), [optionalFields]);
+
+  useEffect(() => {
+    if (!editInternshipId) return;
+    let mounted = true;
+    setLoadingInternship(true);
+    db.entities.Internship.get(editInternshipId)
+      .then((internship) => {
+        if (!mounted) return;
+        setForm({
+          title: internship.title || '',
+          description: internship.description || '',
+          startup_name: internship.startup_name || '',
+          responsibilities: internship.responsibilities || '',
+          requirements: internship.requirements || '',
+          duration: internship.duration || '',
+          deadline: internship.deadline || '',
+          location: internship.location || '',
+          internship_type: internship.internship_type || '',
+          degree_type: internship.degree_type || '',
+          academic_year: internship.academic_year || '',
+        });
+        setSkills(Array.isArray(internship.skills_required) ? internship.skills_required : []);
+
+        const config = internship.application_form_config || {};
+        const optionalFromConfig = Array.isArray(config.optional_fields) ? config.optional_fields : [];
+        const customFieldsFromConfig = Array.isArray(config.custom_fields) ? config.custom_fields : [];
+        const customQuestionsFromConfig = Array.isArray(config.custom_questions) ? config.custom_questions : [];
+
+        const mergedOptionalFields = DEFAULT_OPTIONAL_FIELDS.map((field) => {
+          const configured = optionalFromConfig.find((item) => item.key === field.key);
+          if (!configured) return { ...field, enabled: false, required: false };
+          return {
+            ...field,
+            enabled: true,
+            required: Boolean(configured.required),
+            label: configured.label || field.label,
+          };
+        });
+
+        setOptionalFields(mergedOptionalFields);
+        setCustomFields(
+          customFieldsFromConfig.map((field) => ({
+            id: makeId('custom_field'),
+            key: field.key || makeId('field'),
+            label: field.label || 'Custom field',
+            required: Boolean(field.required),
+          }))
+        );
+        setCustomQuestions(
+          customQuestionsFromConfig.map((question) => ({
+            id: makeId('custom_question'),
+            question: question.question || 'Custom question',
+            required: Boolean(question.required),
+          }))
+        );
+      })
+      .catch(() => {
+        if (!mounted) return;
+        toast({ title: 'Failed to load internship for editing', variant: 'destructive' });
+      })
+      .finally(() => {
+        if (mounted) setLoadingInternship(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [editInternshipId, toast]);
 
   const addSkill = () => {
     const value = skillInput.trim();
@@ -134,24 +210,50 @@ export default function CreateInternship() {
   };
 
   const handleSubmit = async (submitForApproval) => {
-    if (!form.title || !form.description) {
-      toast({ title: 'Please fill in title and description.', variant: 'destructive' });
+    if (!form.title || !form.description || !form.internship_type || !form.degree_type || !form.academic_year) {
+      if (!form.title || !form.description) {
+        toast({ title: 'Please fill in title and description.', variant: 'destructive' });
+        return;
+      }
+      if (!form.internship_type) {
+        toast({ title: 'Internship type is required.', variant: 'destructive' });
+        return;
+      }
+      if (!form.degree_type) {
+        toast({ title: 'Degree type is required.', variant: 'destructive' });
+        return;
+      }
+      if (!form.academic_year) {
+        toast({ title: 'Academic year is required.', variant: 'destructive' });
+      }
       return;
     }
 
     setSubmitting(true);
     try {
       const applicationFormConfig = buildApplicationFormConfig();
-      await db.entities.Internship.create({
+      const payload = {
         ...form,
         deadline: form.deadline || undefined,
         skills_required: skills,
-        status: submitForApproval ? 'pending_approval' : 'draft',
         is_featured: false,
         application_form_config: applicationFormConfig,
         application_questions: applicationFormConfig.custom_questions,
-      });
-      toast({ title: submitForApproval ? 'Internship submitted for approval' : 'Draft saved' });
+      };
+
+      if (editInternshipId) {
+        const existing = await db.entities.Internship.get(editInternshipId);
+        await db.entities.Internship.update(editInternshipId, {
+          ...payload,
+          status: submitForApproval ? 'pending_approval' : (existing?.status || 'draft'),
+        });
+      } else {
+        await db.entities.Internship.create({
+          ...payload,
+          status: submitForApproval ? 'pending_approval' : 'draft',
+        });
+      }
+      toast({ title: submitForApproval ? 'Internship submitted for approval' : (editInternshipId ? 'Internship updated' : 'Draft saved') });
       navigate('/startup/internships');
     } catch {
       toast({ title: 'Failed to save internship', variant: 'destructive' });
@@ -169,9 +271,28 @@ export default function CreateInternship() {
       </Link>
 
       <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
+        {loadingInternship ? <p className="mb-4 text-sm text-muted-foreground">Loading internship details...</p> : null}
         <div className="grid gap-4 md:grid-cols-2">
           <Field label="Title *"><input className="qstp-input" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} /></Field>
           <Field label="Startup name"><input className="qstp-input" value={form.startup_name} onChange={e => setForm({ ...form, startup_name: e.target.value })} /></Field>
+          <Field label="Internship Type *">
+            <select className="qstp-input" value={form.internship_type} onChange={e => setForm({ ...form, internship_type: e.target.value })}>
+              <option value="">Select internship type</option>
+              {INTERNSHIP_TYPES.map((option) => <option key={option} value={option}>{option}</option>)}
+            </select>
+          </Field>
+          <Field label="Degree Type *">
+            <select className="qstp-input" value={form.degree_type} onChange={e => setForm({ ...form, degree_type: e.target.value })}>
+              <option value="">Select degree type</option>
+              {DEGREE_TYPES.map((option) => <option key={option} value={option}>{option}</option>)}
+            </select>
+          </Field>
+          <Field label="Academic Year *">
+            <select className="qstp-input" value={form.academic_year} onChange={e => setForm({ ...form, academic_year: e.target.value })}>
+              <option value="">Select academic year</option>
+              {ACADEMIC_YEARS.map((option) => <option key={option} value={option}>{option}</option>)}
+            </select>
+          </Field>
           <Field label="Duration"><input className="qstp-input" value={form.duration} onChange={e => setForm({ ...form, duration: e.target.value })} /></Field>
           <Field label="Location"><input className="qstp-input" value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} /></Field>
           <Field label="Deadline"><input type="date" className="qstp-input" value={form.deadline} onChange={e => setForm({ ...form, deadline: e.target.value })} /></Field>

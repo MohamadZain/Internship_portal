@@ -171,6 +171,9 @@ export default function InternshipDetail() {
         internship_title: internship.title,
         startup_id: internship.startup_id,
         startup_name: internship.startup_name,
+        internship_type: internship.internship_type,
+        degree_type: internship.degree_type,
+        academic_year: internship.academic_year,
         student_name: form.name,
         student_email: form.email,
         student_university: showLegacyUniversityMajor ? form.university : undefined,
@@ -223,6 +226,13 @@ export default function InternshipDetail() {
                   {internship.duration && <span className="flex items-center gap-1.5"><Clock className="h-4 w-4" />{internship.duration}</span>}
                   {internship.location && <span className="flex items-center gap-1.5"><MapPin className="h-4 w-4" />{internship.location}</span>}
                 </div>
+                {(internship.internship_type || internship.degree_type || internship.academic_year) && (
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {internship.internship_type ? <span className="rounded-lg bg-violet-50 px-2.5 py-1 text-xs font-medium text-violet-700 ring-1 ring-inset ring-violet-600/10">{internship.internship_type}</span> : null}
+                    {internship.degree_type ? <span className="rounded-lg bg-violet-50 px-2.5 py-1 text-xs font-medium text-violet-700 ring-1 ring-inset ring-violet-600/10">{internship.degree_type}</span> : null}
+                    {internship.academic_year ? <span className="rounded-lg bg-violet-50 px-2.5 py-1 text-xs font-medium text-violet-700 ring-1 ring-inset ring-violet-600/10">{internship.academic_year}</span> : null}
+                  </div>
+                )}
               </div>
               <StatusBadge status={internship.status} />
             </div>

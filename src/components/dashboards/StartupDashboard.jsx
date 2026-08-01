@@ -49,8 +49,12 @@ export default function StartupDashboard() {
                 <tr>
                   <th className="px-5 py-3 font-semibold">Title</th>
                   <th className="px-5 py-3 font-semibold">Duration</th>
+                  <th className="px-5 py-3 font-semibold">Type</th>
+                  <th className="px-5 py-3 font-semibold">Degree</th>
+                  <th className="px-5 py-3 font-semibold">Year</th>
                   <th className="px-5 py-3 font-semibold">Deadline</th>
                   <th className="px-5 py-3 font-semibold">Status</th>
+                  <th className="px-5 py-3 font-semibold">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
@@ -61,8 +65,16 @@ export default function StartupDashboard() {
                       <p className="text-xs text-muted-foreground">{i.startup_name}</p>
                     </td>
                     <td className="px-5 py-3.5 text-muted-foreground">{i.duration || '—'}</td>
+                    <td className="px-5 py-3.5 text-muted-foreground">{i.internship_type || '—'}</td>
+                    <td className="px-5 py-3.5 text-muted-foreground">{i.degree_type || '—'}</td>
+                    <td className="px-5 py-3.5 text-muted-foreground">{i.academic_year || '—'}</td>
                     <td className="px-5 py-3.5 text-muted-foreground">{i.deadline ? new Date(i.deadline).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}</td>
                     <td className="px-5 py-3.5"><StatusBadge status={i.status} /></td>
+                    <td className="px-5 py-3.5">
+                      <Link to={`/startup/create-internship?edit=${encodeURIComponent(i.id)}`} className="text-xs font-medium text-violet-600 hover:text-violet-700">
+                        Edit
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>

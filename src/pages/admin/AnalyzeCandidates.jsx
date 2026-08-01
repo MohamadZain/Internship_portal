@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Upload, FileText, X, Loader2, Sparkles, ChevronDown, CheckCircle2 } from 'lucide-react';
+import { useEntityList } from '@/lib/useEntityList';
 import PageHeader from '@/components/PageHeader';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -190,10 +191,12 @@ const MOCK_CANDIDATES = [
 export default function AnalyzeCandidates() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { data: internships } = useEntityList('Internship', { sort: '-created_date' });
   const [jdFile, setJdFile] = useState(null);
   const [jdText, setJdText] = useState('');
   const [resumes, setResumes] = useState([]);
   const [topCount, setTopCount] = useState(5);
+  const [selectedInternshipId, setSelectedInternshipId] = useState('');
   const [analyzing, setAnalyzing] = useState(false);
 
   const handleJdFile = (file) => {
@@ -222,9 +225,30 @@ export default function AnalyzeCandidates() {
     }
     setAnalyzing(true);
     setTimeout(() => {
+      const selectedInternship = (internships || []).find((internship) => internship.id === selectedInternshipId) || null;
       const shuffled = [...MOCK_CANDIDATES].sort(() => Math.random() - 0.5);
-      const selected = shuffled.slice(0, Math.min(topCount, MOCK_CANDIDATES.length));
-      navigate('/admin/top-candidates', { state: { candidates: selected, resumeCount: resumes.length } });
+      const selected = shuffled.slice(0, Math.min(topCount, MOCK_CANDIDATES.length)).map((candidate) => ({
+        ...candidate,
+        bullets: selectedInternship
+          ? [
+            `Matched against ${selectedInternship.internship_type || 'Internship'} role for ${selectedInternship.degree_type || 'degree'} candidates in ${selectedInternship.academic_year || 'target year'}.`,
+            ...(candidate.bullets || []),
+          ]
+          : candidate.bullets,
+      }));
+      navigate('/admin/top-candidates', {
+        state: {
+          candidates: selected,
+          resumeCount: resumes.length,
+          matchingCriteria: selectedInternship
+            ? {
+              internshipType: selectedInternship.internship_type || '',
+              degreeType: selectedInternship.degree_type || '',
+              academicYear: selectedInternship.academic_year || '',
+            }
+            : null,
+        },
+      });
     }, 2500);
   };
 
@@ -259,6 +283,24 @@ export default function AnalyzeCandidates() {
         {/* Job Description */}
         <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
           <h3 className="mb-4 text-sm font-semibold text-foreground">Job Description</h3>
+          <div className="mb-4">
+            <label className="mb-1.5 block text-sm font-medium text-foreground">Internship Context (Optional)</label>
+            <div className="relative">
+              <select
+                value={selectedInternshipId}
+                onChange={(e) => setSelectedInternshipId(e.target.value)}
+                className="w-full appearance-none rounded-xl border border-border bg-white py-2.5 pl-4 pr-10 text-sm outline-none transition focus:border-violet-400 focus:ring-2 focus:ring-violet-500/20"
+              >
+                <option value="">Analyze without internship context</option>
+                {(internships || []).map((internship) => (
+                  <option key={internship.id} value={internship.id}>
+                    {internship.title} — {internship.internship_type || 'Type N/A'} · {internship.degree_type || 'Degree N/A'} · {internship.academic_year || 'Year N/A'}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            </div>
+          </div>
 
           <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-muted/20 px-4 py-3 transition hover:border-violet-300 hover:bg-violet-50/30">
             <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-violet-50 text-violet-600">

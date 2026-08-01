@@ -13,6 +13,7 @@ export default function TopCandidates() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const candidates = location.state?.candidates || [];
+  const matchingCriteria = location.state?.matchingCriteria || null;
   const { data: internships } = useEntityList('Internship', { sort: '-created_date' });
   const { data: applications } = useEntityList('Application', { sort: '-created_date' });
   const [selected, setSelected] = useState(new Set(candidates.map((_, i) => i)));
@@ -95,6 +96,14 @@ export default function TopCandidates() {
   return (
     <div className="space-y-6">
       <PageHeader title="Top Candidates" description="Review and publish AI-ranked candidates to an internship shortlist." />
+      {matchingCriteria ? (
+        <div className="rounded-2xl border border-border bg-white p-4 shadow-sm">
+          <p className="text-sm font-semibold text-foreground">Matching Criteria</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {matchingCriteria.internshipType || 'Internship'} · {matchingCriteria.degreeType || 'Degree'} · {matchingCriteria.academicYear || 'Academic Year'}
+          </p>
+        </div>
+      ) : null}
 
       <div className="rounded-2xl border border-border bg-white p-5 shadow-sm">
         <label className="mb-2 block text-sm font-semibold text-foreground">Internship</label>

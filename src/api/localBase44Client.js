@@ -213,6 +213,12 @@ const makeAuthError = (message, status = 401) => {
   return err;
 };
 
+const validateRequiredInternshipFields = (internship) => {
+  if (!internship?.internship_type) throw makeAuthError("Internship type is required", 400);
+  if (!internship?.degree_type) throw makeAuthError("Degree type is required", 400);
+  if (!internship?.academic_year) throw makeAuthError("Academic year is required", 400);
+};
+
 const getAuthenticatedUser = (state) => findUserByToken(state, getCurrentToken());
 
 const requireAuthenticatedUser = (state) => {
@@ -362,6 +368,7 @@ const createEntityClient = (entityName) => ({
         if (!startup) throw makeAuthError("Startup profile not found for this account", 403);
         record.startup_id = startup.id;
         record.startup_name = startup.name;
+        validateRequiredInternshipFields(record);
       }
 
       if (entityName === "Application" && user.role === "student") {
@@ -435,6 +442,9 @@ const createEntityClient = (entityName) => ({
         id,
         updated_date: nowIso(),
       };
+      if (entityName === "Internship" && user.role === "startup") {
+        validateRequiredInternshipFields(bucket[index]);
+      }
       return deepClone(bucket[index]);
     });
   },
