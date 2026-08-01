@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
-import { Building2, Search, Check, X, Loader2, MapPin, Briefcase, FileText, Users, Eye } from 'lucide-react';
+
+import { Building2, Search, MapPin, Briefcase, Users, Eye, Plus } from 'lucide-react';
 import { useEntityList } from '@/lib/useEntityList';
-import { db } from '@/api/base44Client';
 
 import PageHeader from '@/components/PageHeader';
 import Loading from '@/components/Loading';
@@ -16,9 +16,16 @@ export default function StartupManagement() {
   const { toast } = useToast();
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
-  const [busy, setBusy] = useState(null);
   const [expandedDescriptions, setExpandedDescriptions] = useState({});
   const [expandedDashboard, setExpandedDashboard] = useState({});
+  const [showAddStartup, setShowAddStartup] = useState(false);
+  const [companyName, setCompanyName] = useState("");
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
+
+
+
+
 
   const filtered = useMemo(() => {
     return (data || []).filter(s => {
@@ -68,18 +75,10 @@ export default function StartupManagement() {
     };
   }, [data, internships, applications]);
 
-  const setStatus = async (id, status, label) => {
-    setBusy(id);
-    try {
-      await db.entities.Startup.update(id, { status });
-      toast({ title: `Startup ${label}` });
-      reload();
-    } catch {
-      toast({ title: 'Action failed', variant: 'destructive' });
-    } finally {
-      setBusy(null);
-    }
-  };
+
+
+
+
 
   const toggleReadMore = (startupId) => {
     setExpandedDescriptions((prev) => ({ ...prev, [startupId]: !prev[startupId] }));
@@ -89,8 +88,10 @@ export default function StartupManagement() {
     setExpandedDashboard((prev) => ({ ...prev, [startupId]: !prev[startupId] }));
   };
 
+  
+
   const renderDescription = (startup) => {
-    const text = startup.description || startup.about || 'No description provided.';
+    const text = startup.description || startup.about || 'Description not provided.';
     const isExpanded = expandedDescriptions[startup.id];
     if (text.length <= 180) return <p className="text-sm leading-relaxed text-muted-foreground">{text}</p>;
 
@@ -139,11 +140,30 @@ export default function StartupManagement() {
           <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search startups…" className="w-full rounded-xl border border-border bg-white py-2.5 pl-10 pr-4 text-sm shadow-sm outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-500/20" />
         </div>
-        <div className="flex gap-1.5">
-          {['all', 'pending', 'approved', 'rejected'].map(f => (
-            <button key={f} onClick={() => setFilter(f)} className={`rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition ${filter === f ? 'bg-violet-600 text-white' : 'bg-white text-muted-foreground ring-1 ring-inset ring-border hover:bg-muted'}`}>{f}</button>
-          ))}
-        </div>
+        <div className="flex items-center gap-2">
+        {['all', 'pending', 'approved', 'rejected'].map(f => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className={`rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition ${
+              filter === f
+                ? 'bg-violet-600 text-white'
+                : 'bg-white text-muted-foreground ring-1 ring-inset ring-border hover:bg-muted'
+            }`}
+          >
+            {f}
+          </button>
+        ))}
+
+        <button
+          onClick={() => setShowAddStartup(true)}
+          className="inline-flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700"
+        >
+          <Plus className="h-4 w-4" />
+          Add Startup
+        </button>
+      </div>
+
       </div>
 
       {loading ? <Loading /> : filtered.length === 0 ? (
@@ -157,7 +177,7 @@ export default function StartupManagement() {
                   <h3 className="text-lg font-semibold text-foreground">{s.name}</h3>
                   <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                     <MapPin className="h-4 w-4" />
-                    <span>{s.location || s.city || 'Location not provided'}</span>
+                    <span>{s.location || s.city || 'Qatar Science and Technology Park'}</span>
                   </div>
                 </div>
                 <StatusBadge status={s.status || 'pending'} />
@@ -179,12 +199,6 @@ export default function StartupManagement() {
               <div className="mt-4 flex flex-wrap gap-2">
                 <button onClick={() => toggleDashboard(s.id)} className="inline-flex items-center gap-1.5 rounded-lg bg-violet-600 px-3 py-2 text-xs font-semibold text-white hover:bg-violet-700">
                   <Eye className="h-3.5 w-3.5" /> {expandedDashboard[s.id] ? 'Hide Dashboard' : 'View Dashboard'}
-                </button>
-                <button onClick={() => setStatus(s.id, 'approved', 'approved')} disabled={busy === s.id} className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-60">
-                  {busy === s.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />} Approve
-                </button>
-                <button onClick={() => setStatus(s.id, 'rejected', 'rejected')} disabled={busy === s.id} className="inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-2 text-xs font-semibold text-rose-600 ring-1 ring-inset ring-rose-200 hover:bg-rose-50 disabled:opacity-60">
-                  <X className="h-3.5 w-3.5" /> Reject
                 </button>
               </div>
 
@@ -229,6 +243,56 @@ export default function StartupManagement() {
           ))}
         </div>
       )}
+      {showAddStartup && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+
+      <h2 className="mb-4 text-xl font-bold">
+        Add Startup
+      </h2>
+
+      <input
+        className="mb-3 w-full rounded-lg border p-2"
+        placeholder="Company Name"
+        value={companyName}
+        onChange={(e)=>setCompanyName(e.target.value)}
+      />
+
+      <input
+        className="mb-3 w-full rounded-lg border p-2"
+        placeholder="Location"
+        value={location}
+        onChange={(e)=>setLocation(e.target.value)}
+      />
+
+      <textarea
+        className="mb-4 w-full rounded-lg border p-2"
+        placeholder="Company Description"
+        value={description}
+        onChange={(e)=>setDescription(e.target.value)}
+      />
+
+      <div className="flex justify-end gap-2">
+
+        <button
+          onClick={()=>setShowAddStartup(false)}
+          className="rounded-lg border px-4 py-2"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={handleAddStartup}
+          className="rounded-lg bg-violet-600 px-4 py-2 text-white"
+        >
+          Add Startup
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+)}
     </div>
   );
 }
