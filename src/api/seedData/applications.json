@@ -20,6 +20,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 5,
     "student_academic_year": "4th Year"
   },
   {
@@ -63,6 +64,7 @@
     "cover_letter": "Data analysis is closely aligned with my degree and is an area I would like to gain practical experience in.",
     "application_description": "I have used Python, pandas, matplotlib, and SQL in university projects.",
     "application_answers": [
+
       {
         "question": "Why are you interested in this role?",
         "answer": "I want to apply my data analysis coursework to real business datasets."
@@ -76,6 +78,7 @@
     ],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 97,
     "student_academic_year": "4th Year"
   },
   {
@@ -122,6 +125,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 86,
     "student_academic_year": "3rd Year"
   },
   {
@@ -191,6 +195,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 64,
     "student_academic_year": "Fresh Graduate"
   },
   {
@@ -214,6 +219,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 29,
     "student_academic_year": "Fresh Graduate"
   },
   {
@@ -260,6 +266,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 21,
     "student_academic_year": "2nd Year"
   },
   {
@@ -283,6 +290,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 1,
     "student_academic_year": "2nd Year"
   },
   {
@@ -329,6 +337,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 61,
     "student_academic_year": "3rd Year"
   },
   {
@@ -352,6 +361,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 25,
     "student_academic_year": "3rd Year"
   },
   {
@@ -375,6 +385,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 6,
     "student_academic_year": "4th Year"
   },
   {
@@ -398,6 +409,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 66,
     "student_academic_year": "4th Year"
   },
   {
@@ -421,6 +433,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 75,
     "student_academic_year": "1st Year"
   },
   {
@@ -467,6 +480,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 59,
     "student_academic_year": "1st Year"
   },
   {
@@ -490,6 +504,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 49,
     "student_academic_year": "2nd Year"
   },
   {
@@ -536,6 +551,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 100,
     "student_academic_year": "1st Year"
   },
   {
@@ -559,6 +575,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 50,
     "student_academic_year": "1st Year"
   },
   {
@@ -582,6 +599,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 51,
     "student_academic_year": "2nd Year"
   },
   {
@@ -628,6 +646,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 55,
     "student_academic_year": "1st Year"
   },
   {
@@ -651,6 +670,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 17,
     "student_academic_year": "1st Year"
   },
   {
@@ -674,6 +694,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 12,
     "student_academic_year": "3rd Year"
   },
   {
@@ -697,6 +718,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 87,
     "student_academic_year": "3rd Year"
   },
   {
@@ -720,6 +742,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 24,
     "student_academic_year": "3rd Year"
   },
   {
@@ -766,6 +789,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 61,
     "student_academic_year": "2nd Year"
   },
   {
@@ -789,6 +813,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 69,
     "student_academic_year": "4th Year"
   },
   {
@@ -812,6 +837,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 48,
     "student_academic_year": "4th Year"
   },
   {
@@ -858,6 +884,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 97,
     "student_academic_year": "Fresh Graduate"
   },
   {
@@ -904,6 +931,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 58,
     "student_academic_year": "4th Year"
   },
   {
@@ -927,6 +955,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 94,
     "student_academic_year": "Fresh Graduate"
   },
   {
@@ -950,6 +979,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 52,
     "student_academic_year": "Fresh Graduate"
   },
   {
@@ -973,6 +1003,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 32,
     "student_academic_year": "4th Year"
   },
   {
@@ -996,6 +1027,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 58,
     "student_academic_year": "2nd Year"
   },
   {
@@ -1019,6 +1051,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 21,
     "student_academic_year": "2nd Year"
   },
   {
@@ -1042,6 +1075,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 72,
     "student_academic_year": "1st Year"
   },
   {
@@ -1088,6 +1122,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 65,
     "student_academic_year": "Fresh Graduate"
   },
   {
@@ -1134,6 +1169,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 37,
     "student_academic_year": "3rd Year"
   },
   {
@@ -1157,6 +1193,7 @@
     "custom_field_answers": [],
     "application_form_snapshot": null,
     "status": "applied",
+    "coverLetterAIScore": 81,
     "student_academic_year": "Fresh Graduate"
   }
 ]
