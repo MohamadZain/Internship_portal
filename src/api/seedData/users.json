@@ -1,7 +1,7 @@
 [
   {
     "id": "user_admin_001",
-    "email": "admin@local.dev",
+    "email": "admin@qstp.local",
     "password": "admin123",
     "role": "admin",
     "name": "Local Admin",
@@ -29,7 +29,7 @@
 
   {
     "id": "user_startup_002",
-    "email": "founder@pixelcraft.local",
+    "email": "pixelcraft@startup.local",
     "password": "startup123",
     "role": "startup",
     "name": "Omar Al-Hassan",
@@ -110,7 +110,7 @@
   },
   {
     "id": "user_startup_011",
-    "email": "team@insightlabs.local",
+    "email": "insightlabs@startup.local",
     "password": "startup123",
     "role": "startup",
     "name": "Adam Martin",
@@ -120,7 +120,7 @@
 
   {
     "id": "user_student_002",
-    "email": "sara.ali@student.local",
+    "email": "sara@student.local",
     "password": "student123",
     "role": "student",
     "name": "Sara Ali",
@@ -299,4 +299,3 @@
     "created_date": "2026-07-31T00:00:00.000Z"
   }
 ]
-

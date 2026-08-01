@@ -40,7 +40,7 @@ export default function InternshipApproval() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Internship Approval" description="Review and approve internship postings before they become visible to students." />
+      <PageHeader title=" Postings Approval" description="Review and approve internship postings before they become visible to students." />
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative flex-1 sm:max-w-xs">

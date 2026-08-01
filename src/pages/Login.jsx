@@ -12,7 +12,7 @@ import GoogleIcon from "@/components/GoogleIcon";
 import { safeReturnTo } from "@/lib/authReturnTo";
 
 export default function Login() {
-  const [email, setEmail] = useState("admin@local.dev");
+  const [email, setEmail] = useState("admin@qstp.local");
   const [password, setPassword] = useState("admin123");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);

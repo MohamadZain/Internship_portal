@@ -134,8 +134,8 @@ export default function CreateInternship() {
   };
 
   const handleSubmit = async (submitForApproval) => {
-    if (!form.title || !form.description || !form.startup_name) {
-      toast({ title: 'Please fill in title, startup name, and description.', variant: 'destructive' });
+    if (!form.title || !form.description) {
+      toast({ title: 'Please fill in title and description.', variant: 'destructive' });
       return;
     }
 
@@ -171,7 +171,7 @@ export default function CreateInternship() {
       <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
         <div className="grid gap-4 md:grid-cols-2">
           <Field label="Title *"><input className="qstp-input" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} /></Field>
-          <Field label="Startup name *"><input className="qstp-input" value={form.startup_name} onChange={e => setForm({ ...form, startup_name: e.target.value })} /></Field>
+          <Field label="Startup name"><input className="qstp-input" value={form.startup_name} onChange={e => setForm({ ...form, startup_name: e.target.value })} /></Field>
           <Field label="Duration"><input className="qstp-input" value={form.duration} onChange={e => setForm({ ...form, duration: e.target.value })} /></Field>
           <Field label="Location"><input className="qstp-input" value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} /></Field>
           <Field label="Deadline"><input type="date" className="qstp-input" value={form.deadline} onChange={e => setForm({ ...form, deadline: e.target.value })} /></Field>

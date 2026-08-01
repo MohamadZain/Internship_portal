@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Briefcase, Users, FileText, Plus, Eye, Clock } from 'lucide-react';
+import { Briefcase, Users, FileText, Plus, Clock } from 'lucide-react';
 import { useEntityList } from '@/lib/useEntityList';
 import PageHeader from '@/components/PageHeader';
 import StatCard from '@/components/StatCard';
@@ -9,11 +9,12 @@ import EmptyState from '@/components/EmptyState';
 
 export default function StartupDashboard() {
   const { data: internships, loading } = useEntityList('Internship', { sort: '-created_date' });
+  const { data: applications } = useEntityList('Application', { sort: '-created_date' });
   const { data: shortlists } = useEntityList('Shortlist', { sort: '-created_date' });
 
-  const published = internships?.filter(i => i.status === 'published') || [];
   const pending = internships?.filter(i => i.status === 'pending_approval') || [];
-  const totalApps = internships?.length || 0;
+  const totalInternships = internships?.length || 0;
+  const totalApplications = applications?.length || 0;
 
   return (
     <div className="space-y-7">
@@ -27,10 +28,10 @@ export default function StartupDashboard() {
       </PageHeader>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard icon={Briefcase} label="Total Internships" value={loading ? '—' : totalApps} accent="violet" />
-        <StatCard icon={Eye} label="Published" value={loading ? '—' : published.length} accent="emerald" sublabel="Visible to students" />
+        <StatCard icon={Briefcase} label="Total Internships" value={loading ? '—' : totalInternships} accent="violet" />
+        <StatCard icon={FileText} label="Applications Received" value={loading ? '—' : totalApplications} accent="blue" />
         <StatCard icon={Clock} label="Pending Approval" value={loading ? '—' : pending.length} accent="amber" sublabel="Awaiting QSTP review" />
-        <StatCard icon={Users} label="Shortlisted Candidates" value={shortlists?.length || 0} accent="blue" sublabel="Ready to review" />
+        <StatCard icon={Users} label="Shortlisted Candidates" value={shortlists?.length || 0} accent="emerald" sublabel="Ready to review" />
       </div>
 
       <div className="space-y-4">

@@ -5,7 +5,9 @@ import {
   Sparkles, ListChecks, Building2, Menu, X, ChevronDown
 } from 'lucide-react';
 import { useRole } from '@/lib/RoleContext';
+import { useAuth } from '@/lib/AuthContext';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/components/ui/use-toast';
 
 const NAV = {
   student: [
@@ -50,11 +52,41 @@ function Logo() {
 }
 
 function RoleSwitcher() {
-  const { role, setRole } = useRole();
+  const { role } = useRole();
+  const { user, switchAccount } = useAuth();
+  const { toast } = useToast();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const switchRole = (key) => { setRole(key); setOpen(false); navigate('/dashboard'); };
+  const [switchingEmail, setSwitchingEmail] = useState('');
+
+  const DEMO_ACCOUNTS = [
+    { email: 'admin@qstp.local', label: 'QSTP Admin', desc: 'Program owner' },
+    { email: 'pixelcraft@startup.local', label: 'PixelCraft Startup', desc: 'Hire talent' },
+    { email: 'insightlabs@startup.local', label: 'InsightLabs Startup', desc: 'Hire talent' },
+    { email: 'student@local.dev', label: 'Student Account', desc: 'Browse & apply' },
+    { email: 'sara@student.local', label: 'Sara Student', desc: 'Browse & apply' },
+  ];
+
+  const switchRole = async (email) => {
+    setSwitchingEmail(email);
+    try {
+      await switchAccount(email);
+      setOpen(false);
+      navigate('/dashboard');
+    } catch (error) {
+      toast({
+        title: 'Failed to switch account',
+        description: error?.message || 'Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setSwitchingEmail('');
+    }
+  };
   const meta = ROLE_META[role];
+
+  const currentEmail = user?.email || '';
+  const currentAccountLabel = DEMO_ACCOUNTS.find((account) => account.email === currentEmail)?.label || meta.label;
   return (
     <div className="relative">
       <button
@@ -67,8 +99,8 @@ function RoleSwitcher() {
           {role === 'admin' && <ShieldCheck className="h-4 w-4" />}
         </div>
         <div className="min-w-0 flex-1 leading-tight">
-          <p className="text-sm font-semibold text-white">{meta.label}</p>
-          <p className="text-[11px] text-sidebar-foreground/60">{meta.desc}</p>
+          <p className="text-sm font-semibold text-white">{currentAccountLabel}</p>
+          <p className="text-[11px] text-sidebar-foreground/60 truncate">{currentEmail || meta.desc}</p>
         </div>
         <ChevronDown className={cn('h-4 w-4 text-sidebar-foreground/50 transition', open && 'rotate-180')} />
       </button>
@@ -76,23 +108,24 @@ function RoleSwitcher() {
         <>
           <div className="fixed inset-0 z-30" onClick={() => setOpen(false)} />
           <div className="absolute bottom-full left-0 right-0 z-40 mb-2 overflow-hidden rounded-xl border border-sidebar-border bg-[hsl(232_30%_11%)] shadow-2xl">
-            {Object.entries(ROLE_META).map(([key, m]) => (
+            {DEMO_ACCOUNTS.map((account) => (
               <button
-                key={key}
-                onClick={() => switchRole(key)}
+                key={account.email}
+                onClick={() => switchRole(account.email)}
+                disabled={switchingEmail === account.email}
                 className={cn(
-                  'flex w-full items-center gap-3 px-3 py-2.5 text-left transition hover:bg-sidebar-accent',
-                  role === key && 'bg-sidebar-accent/60'
+                  'flex w-full items-center gap-3 px-3 py-2.5 text-left transition hover:bg-sidebar-accent disabled:opacity-60',
+                  currentEmail === account.email && 'bg-sidebar-accent/60'
                 )}
               >
                 <div className="grid h-7 w-7 place-items-center rounded-lg bg-violet-500/15 text-violet-300">
-                  {key === 'student' && <Users className="h-3.5 w-3.5" />}
-                  {key === 'startup' && <Building2 className="h-3.5 w-3.5" />}
-                  {key === 'admin' && <ShieldCheck className="h-3.5 w-3.5" />}
+                  {account.email === 'admin@qstp.local' && <ShieldCheck className="h-3.5 w-3.5" />}
+                  {(account.email === 'pixelcraft@startup.local' || account.email === 'insightlabs@startup.local') && <Building2 className="h-3.5 w-3.5" />}
+                  {(account.email === 'student@local.dev' || account.email === 'sara@student.local') && <Users className="h-3.5 w-3.5" />}
                 </div>
                 <div className="leading-tight">
-                  <p className="text-sm font-medium text-white">{m.label}</p>
-                  <p className="text-[10px] text-sidebar-foreground/50">{m.desc}</p>
+                  <p className="text-sm font-medium text-white">{account.label}</p>
+                  <p className="text-[10px] text-sidebar-foreground/50">{account.email}</p>
                 </div>
               </button>
             ))}

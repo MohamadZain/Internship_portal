@@ -90,6 +90,11 @@ export const AuthProvider = ({ children }) => {
     db.auth.redirectToLogin(window.location.href);
   };
 
+  const switchAccount = async (email) => {
+    await db.auth.switchAccount(email);
+    await checkUserAuth();
+  };
+
   return (
     <AuthContext.Provider value={{ 
       user, 
@@ -100,6 +105,7 @@ export const AuthProvider = ({ children }) => {
       appPublicSettings,
       authChecked,
       logout,
+      switchAccount,
       navigateToLogin,
       checkUserAuth,
       checkAppState

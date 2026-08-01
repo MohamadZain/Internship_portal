@@ -5,6 +5,7 @@ import {
   Upload, Linkedin, Github, Globe, Loader2, X
 } from 'lucide-react';
 import { db } from '@/api/base44Client';
+import { useAuth } from '@/lib/AuthContext';
 
 import { useToast } from '@/components/ui/use-toast';
 import Loading from '@/components/Loading';
@@ -16,6 +17,7 @@ export default function InternshipDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useAuth();
   const [internship, setInternship] = useState(null);
   const [loading, setLoading] = useState(true);
   const [applyOpen, setApplyOpen] = useState(false);
@@ -36,6 +38,15 @@ export default function InternshipDetail() {
     website: '',
     cover_letter: '',
   });
+
+  useEffect(() => {
+    if (!user) return;
+    setForm((prev) => ({
+      ...prev,
+      name: prev.name || user.name || '',
+      email: user.email || prev.email || '',
+    }));
+  }, [user]);
 
   useEffect(() => {
     db.entities.Internship.get(id).then(d => { setInternship(d); setLoading(false); }).catch(() => setLoading(false));
@@ -131,7 +142,7 @@ export default function InternshipDetail() {
     setSubmitting(true);
     try {
       const existingApplications = await db.entities.Application.filter({ internship_id: id }, '-created_date', 1000);
-      const normalizedEmail = String(form.email).trim().toLowerCase();
+      const normalizedEmail = String(user?.email || form.email).trim().toLowerCase();
       const alreadyApplied = (existingApplications || []).some(
         (application) => String(application.student_email || '').trim().toLowerCase() === normalizedEmail
       );
@@ -281,7 +292,7 @@ export default function InternshipDetail() {
                   <input className="qstp-input" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Your name" />
                 </Field>
                 <Field label="Email *">
-                  <input className="qstp-input" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="you@email.com" />
+                  <input className="qstp-input" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="you@email.com" disabled={Boolean(user?.email)} />
                 </Field>
               </div>
 

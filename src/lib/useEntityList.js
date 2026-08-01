@@ -1,8 +1,10 @@
 const db = globalThis.__B44_DB__ || { auth:{ isAuthenticated: async()=>false, me: async()=>null }, entities:new Proxy({}, { get:()=>({ filter:async()=>[], get:async()=>null, create:async()=>({}), update:async()=>({}), delete:async()=>({}) }) }), integrations:{ Core:{ UploadFile:async()=>({ file_url:'' }) } } };
 
 import { useState, useEffect, useCallback } from 'react';
+import { useAuth } from '@/lib/AuthContext';
 
 export function useEntityList(entityName, { sort = '-created_date', limit = 100, filter = {} } = {}) {
+  const { user } = useAuth();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,7 +23,7 @@ export function useEntityList(entityName, { sort = '-created_date', limit = 100,
     } finally {
       setLoading(false);
     }
-  }, [entityName, sort, limit, JSON.stringify(filter)]);
+  }, [entityName, sort, limit, JSON.stringify(filter), user?.id]);
 
   useEffect(() => { load(); }, [load]);
 
