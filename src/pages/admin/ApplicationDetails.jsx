@@ -7,6 +7,7 @@ import PageHeader from '@/components/PageHeader';
 import Loading from '@/components/Loading';
 import EmptyState from '@/components/EmptyState';
 import StatusBadge from '@/components/StatusBadge';
+import { getAiUsageBadgeClasses, getAiUsageTone, getCoverLetterAiScore } from '@/lib/aiScore';
 
 function normalizeDocuments(application) {
   const raw =
@@ -130,25 +131,23 @@ export default function ApplicationDetails() {
             <p className="text-xs text-muted-foreground">Startup: {application.startup_name || 'Not provided'}</p>
           </div>
 
-          {typeof application.coverLetterAIScore === 'number' && (
-            <div className="rounded-2xl border border-border bg-white p-5 shadow-sm">
-              <h2 className="mb-3 text-sm font-semibold text-foreground">AI Cover Letter Score</h2>
-              <div
-                className={`inline-flex items-center rounded-lg px-3 py-2 text-sm font-semibold ${
-                  application.coverLetterAIScore < 20
-                    ? 'bg-emerald-100 text-emerald-800 ring-1 ring-inset ring-emerald-600/20'
-                    : application.coverLetterAIScore < 50
-                    ? 'bg-emerald-300 text-emerald-900 ring-1 ring-inset ring-emerald-600/30'
-                    : application.coverLetterAIScore < 80
-                    ? 'bg-rose-300 text-rose-900 ring-1 ring-inset ring-rose-600/30'
-                    : 'bg-rose-600 text-white ring-1 ring-inset ring-rose-900/50'
-                }`}
-              >
-                {application.coverLetterAIScore}% AI Generated
+          {(() => {
+            const score = getCoverLetterAiScore(application);
+            if (score === null) return null;
+
+            const tone = getAiUsageTone(score);
+            const toneLabel = tone === 'low' ? 'Low AI usage' : tone === 'medium' ? 'Moderate AI usage' : tone === 'high' ? 'High AI usage' : 'Very high AI usage';
+
+            return (
+              <div className="rounded-2xl border border-border bg-white p-5 shadow-sm">
+                <h2 className="mb-3 text-sm font-semibold text-foreground">AI Cover Letter Score</h2>
+                <div className={`inline-flex items-center rounded-lg px-3 py-2 text-sm font-semibold ${getAiUsageBadgeClasses(score)}`}>
+                  {score}% AI Generated
+                </div>
+                <p className="mt-2 text-xs text-muted-foreground">{toneLabel}. Analyzed from cover letter text using Sapling AI.</p>
               </div>
-              <p className="mt-2 text-xs text-muted-foreground">Analyzed from cover letter text using Sapling AI.</p>
-            </div>
-          )}
+            );
+          })()}
 
           <div className="rounded-2xl border border-border bg-white p-5 shadow-sm">
             <h2 className="mb-3 text-sm font-semibold text-foreground">Resume</h2>

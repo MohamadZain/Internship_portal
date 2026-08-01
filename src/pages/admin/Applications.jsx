@@ -11,6 +11,7 @@ import Loading from '@/components/Loading';
 import EmptyState from '@/components/EmptyState';
 import StatusBadge from '@/components/StatusBadge';
 import { useToast } from '@/components/ui/use-toast';
+import { getAiUsageBadgeClasses, getCoverLetterAiScore } from '@/lib/aiScore';
 
 const ACADEMIC_YEARS = ['1st Year', '2nd Year', '3rd Year', '4th Year', 'Fresh Graduate'];
 
@@ -403,17 +404,16 @@ export default function AdminApplications() {
                       </div>
                     </td>
                     <td className="px-5 py-3.5">
-                      {typeof a.coverLetterAIScore === 'number' ? (
-                        <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${
-                          a.coverLetterAIScore < 50 
-                            ? 'bg-emerald-50 text-emerald-700 ring-emerald-600/20' 
-                            : 'bg-rose-50 text-rose-700 ring-rose-600/20'
-                        }`}>
-                          {a.coverLetterAIScore}%
-                        </span>
-                      ) : (
-                        <span className="text-muted-foreground text-xs">—</span>
-                      )}
+                      {(() => {
+                        const score = getCoverLetterAiScore(a);
+                        return score !== null ? (
+                          <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${getAiUsageBadgeClasses(score)}`}>
+                            {score}%
+                          </span>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">—</span>
+                        );
+                      })()}
                     </td>
                     <td className="px-5 py-3.5"><StatusBadge status={a.status} /></td>
                     <td className="px-5 py-3.5">

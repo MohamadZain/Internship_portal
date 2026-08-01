@@ -24,6 +24,38 @@ const deepClone = (value) => {
 
 const makeId = (prefix) => `${prefix}_${Math.random().toString(36).slice(2, 10)}${Date.now().toString(36)}`;
 
+const seedEntityMap = {
+  Startup: startupsSeed,
+  Internship: internshipsSeed,
+  Application: applicationsSeed,
+  Shortlist: shortlistsSeed,
+  Notification: notificationsSeed,
+};
+
+const mergeSeedRecords = (records, seedRecords = []) => {
+  const seedById = new Map();
+  (seedRecords || []).forEach((record) => {
+    if (record && typeof record === "object" && record.id) {
+      seedById.set(String(record.id), record);
+    }
+  });
+
+  const existingRecords = Array.isArray(records) ? records : [];
+  const mergedRecords = existingRecords.map((record) => {
+    if (!record || typeof record !== "object") return record;
+    const seedRecord = seedById.get(String(record.id));
+    if (!seedRecord) return record;
+    return { ...deepClone(seedRecord), ...deepClone(record) };
+  });
+
+  const missingSeedRecords = (seedRecords || [])
+    .filter((record) => record && typeof record === "object" && record.id)
+    .filter((record) => !mergedRecords.some((existing) => String(existing?.id) === String(record.id)))
+    .map((record) => deepClone(record));
+
+  return [...mergedRecords, ...missingSeedRecords];
+};
+
 const seedState = () => {
   const created = nowIso();
   const startupId = "startup_demo_001";
@@ -100,6 +132,17 @@ const normalizeStore = (state) => {
   next.authTokens = next.authTokens && typeof next.authTokens === "object" ? next.authTokens : {};
   next.entities = next.entities && typeof next.entities === "object" ? next.entities : {};
   next.currentToken = next.currentToken || currentToken || null;
+
+  const normalizedEntities = {};
+  Object.entries(next.entities).forEach(([entityName, records]) => {
+    normalizedEntities[entityName] = Array.isArray(records) ? records : [];
+  });
+
+  Object.entries(seedEntityMap).forEach(([entityName, seedRecords]) => {
+    normalizedEntities[entityName] = mergeSeedRecords(normalizedEntities[entityName], seedRecords);
+  });
+
+  next.entities = normalizedEntities;
 
   const emailMigrationEntries = Object.entries(USER_EMAIL_MIGRATIONS);
   if (emailMigrationEntries.length > 0) {
