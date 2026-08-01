@@ -33,6 +33,7 @@ export default function CreateInternship() {
   const { toast } = useToast();
   const [submitting, setSubmitting] = useState(false);
   const [loadingInternship, setLoadingInternship] = useState(false);
+  const [generatingDescription, setGeneratingDescription] = useState(false);
   const [skillInput, setSkillInput] = useState('');
   const [skills, setSkills] = useState([]);
   const [form, setForm] = useState({
@@ -262,6 +263,71 @@ export default function CreateInternship() {
     }
   };
 
+  const generateDescription = async () => {
+    const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
+
+    if (!apiKey) {
+      toast({ title: 'OpenRouter API key is not configured.', variant: 'destructive' });
+      return;
+    }
+
+    setGeneratingDescription(true);
+    try {
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: 'openrouter/free',
+          messages: [
+            {
+              role: 'system',
+              content: `You are an expert HR assistant. Based on the provided info, generate a description, responsibilities, requirements, and a list of relevant skills for an internship. Return ONLY a valid JSON object with NO markdown formatting. The JSON must have exactly four keys: 'description' (string), 'responsibilities' (string), 'requirements' (string), and 'skills' (array of strings). Info: title: ${form.title}, startup name: ${form.startup_name}, duration: ${form.duration}`,
+            },
+            {
+              role: 'user',
+              content: 'Write a short professional description, the responsibilities, the requirements, and relevant skills for this internship position. Output ONLY valid JSON without any surrounding text or markdown code blocks.',
+            },
+          ],
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Failed to generate content.');
+      }
+
+      const data = await response.json();
+      let content = data?.choices?.[0]?.message?.content || '';
+      content = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+
+      const parsed = JSON.parse(content);
+
+      setForm((prev) => ({
+        ...prev,
+        description: parsed.description || prev.description,
+        responsibilities: parsed.responsibilities || prev.responsibilities,
+        requirements: parsed.requirements || prev.requirements,
+      }));
+
+      if (parsed.skills && Array.isArray(parsed.skills)) {
+        setSkills((prevSkills) => {
+          const newSkills = parsed.skills.filter((skill) => !prevSkills.includes(skill));
+          return [...prevSkills, ...newSkills];
+        });
+      }
+
+      toast({ title: 'Successfully generated content!' });
+    } catch (error) {
+      console.error('Failed to generate description:', error);
+      toast({ title: 'Failed to generate description', description: error.message, variant: 'destructive' });
+    } finally {
+      setGeneratingDescription(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <PageHeader title="Create Internship" description="Create a new internship posting and fully configure the student application form." />
@@ -299,7 +365,31 @@ export default function CreateInternship() {
         </div>
 
         <div className="mt-4 space-y-4">
-          <Field label="Description *"><textarea rows={4} className="qstp-input resize-none" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} /></Field>
+          <Field
+            label={
+              <div className="flex items-center gap-2">
+                <span>Description *</span>
+                <button
+                  type="button"
+                  title={generatingDescription ? 'AI is generating description...' : 'Generate Description with AI'}
+                  onClick={generateDescription}
+                  disabled={generatingDescription}
+                  className="rounded-md border border-purple-200 bg-purple-50 px-2 py-1 text-xs font-medium text-purple-600 transition-all duration-200 hover:border-purple-300 hover:bg-purple-100 hover:text-purple-700 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {generatingDescription ? (
+                    <span className="flex items-center gap-1.5">
+                      <span className="h-3 w-3 animate-spin rounded-full border-2 border-purple-300 border-t-purple-600" />
+                      Generating...
+                    </span>
+                  ) : (
+                    '✨ AI'
+                  )}
+                </button>
+              </div>
+            }
+          >
+            <textarea rows={4} className="qstp-input resize-none" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
+          </Field>
           <Field label="Responsibilities"><textarea rows={3} className="qstp-input resize-none" value={form.responsibilities} onChange={e => setForm({ ...form, responsibilities: e.target.value })} /></Field>
           <Field label="Requirements"><textarea rows={3} className="qstp-input resize-none" value={form.requirements} onChange={e => setForm({ ...form, requirements: e.target.value })} /></Field>
         </div>
